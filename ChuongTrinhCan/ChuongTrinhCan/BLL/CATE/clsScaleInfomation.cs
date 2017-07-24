@@ -1,0 +1,185 @@
+﻿using ChuongTrinhCan.Module;
+using EntityModel.DataModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Data.Entity.Migrations;
+
+namespace ChuongTrinhCan.BLL.CATE
+{
+    public class clsScaleInfomation
+    {
+        #region Constructor
+        private static volatile clsScaleInfomation instance = null;
+        private static readonly object mLock = new object();
+        protected clsScaleInfomation() { }
+        public static clsScaleInfomation Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    lock (mLock)
+                    {
+                        if (instance == null)
+                            instance = new clsScaleInfomation();
+                    }
+                }
+                return instance;
+            }
+        }
+        #endregion
+
+        #region Functions
+        aModel db, _accessModel;
+        public int getID()
+        {
+            int res = 1;
+            db = new aModel();
+            IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID);
+            lstTemp = lstTemp.Where(x => x.CreatedDate.Date >= DateTime.Now.ServerNow().Date && x.CreatedDate.Date <= DateTime.Now.ServerNow().Date);
+            if (lstTemp.Any())
+                res = Convert.ToInt32(lstTemp.LastOrDefault().Code) + 1;
+            return res;
+        }
+
+        public string[] getVehicle()
+        {
+            db = new aModel();
+            IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID);
+            string[] arrResult = lstTemp.Select(x => x.VehicleNumber).Distinct().ToArray<string>();
+            return arrResult ?? new string[] { };
+        }
+
+        //public IList<eScaleInfomation> getAll(DateTime fDate, DateTime tDate, bool IsEnable = true)
+        //{
+        //    db = new aModel();
+        //    IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID && x.IsEnable == IsEnable);
+        //    lstTemp = lstTemp.Where(x => x.CreatedDate.Date >= fDate.Date && x.CreatedDate.Date <= tDate.Date);
+
+        //    IEnumerable<eScaleInfomation> lstImport = lstTemp.Where(x => x.IsImport && !x.IsExport).OrderByDescending(x => x.KeyID).ThenBy(x => x.CustomerName);
+        //    IEnumerable<eScaleInfomation> lstExport = lstTemp.Where(x => x.IsImport && x.IsExport).OrderByDescending(x => x.KeyID).ThenBy(x => x.CustomerName);
+        //    List<eScaleInfomation> lstResult = new List<eScaleInfomation>();
+        //    lstResult.AddRange(lstImport);
+        //    lstResult.AddRange(lstExport);
+
+        //    return lstResult;
+        //}
+
+        public IList<eScaleInfomation> getAll(DateTime fDate, DateTime tDate)
+        {
+            db = new aModel();
+            IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID && x.IsEnable);
+
+            lstTemp = lstTemp.Where(delegate (eScaleInfomation e)
+            {
+                if (e.DateScale2.HasValue)
+                    return e.DateScale2.Value.Date >= fDate.Date && e.DateScale2.Value.Date <= tDate.Date;
+                else
+                    return e.DateScale1.Date >= fDate.Date && e.DateScale1.Date <= tDate.Date;
+            });
+
+            IEnumerable<eScaleInfomation> lstImport = lstTemp.Where(x => !x.IsImport && !x.IsExport).OrderBy(x => x.CustomerName).ThenByDescending(x => x.DateScale1);
+            IEnumerable<eScaleInfomation> lstExport = lstTemp.Where(x => ((x.IsImport && !x.IsExport) || (!x.IsImport && x.IsExport)) && x.DateScale2.HasValue).OrderBy(x => x.CustomerName).ThenByDescending(x => x.DateScale2);
+            List<eScaleInfomation> lstResult = new List<eScaleInfomation>();
+
+            lstResult.AddRange(lstImport);
+            lstResult.AddRange(lstExport);
+
+            return lstResult;
+        }
+
+        public IList<eScaleInfomation> getAll(DateTime fDate, DateTime tDate, bool IsFilter = false, bool? IsImport = null, bool? IsExport = null, string VehicleNumber = "", string CustomerName = "", string WarehouseName = "", string ProductName = "", bool findAll = true)
+        {
+            db = new aModel();
+            IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID && x.IsEnable);
+
+            lstTemp = lstTemp.Where(delegate (eScaleInfomation e)
+            {
+                if (e.DateScale2.HasValue)
+                    return e.DateScale2.Value.Date >= fDate.Date && e.DateScale2.Value.Date <= tDate.Date;
+                else
+                    return e.DateScale1.Date >= fDate.Date && e.DateScale1.Date <= tDate.Date;
+            });
+
+            if (IsImport.HasValue)
+                lstTemp = lstTemp.Where(x => x.IsImport == IsImport);
+
+            if (IsExport.HasValue)
+                lstTemp = lstTemp.Where(x => x.IsExport == IsExport);
+
+            if (!string.IsNullOrEmpty(VehicleNumber))
+                lstTemp = lstTemp.Where(x => x.VehicleNumber.CompareText(VehicleNumber, findAll));
+
+            if (!string.IsNullOrEmpty(CustomerName))
+                lstTemp = lstTemp.Where(x => x.CustomerName.CompareText(CustomerName, findAll));
+
+            if (!string.IsNullOrEmpty(WarehouseName))
+                lstTemp = lstTemp.Where(x => x.WarehouseName.CompareText(WarehouseName, findAll));
+
+            if (!string.IsNullOrEmpty(ProductName))
+                lstTemp = lstTemp.Where(x => x.ProductName.CompareText(ProductName, findAll));
+
+            IEnumerable<eScaleInfomation> lstImport = lstTemp.Where(x => !x.IsImport && !x.IsExport).OrderBy(x => x.CustomerName).ThenByDescending(x => x.DateScale1);
+            IEnumerable<eScaleInfomation> lstExport = lstTemp.Where(x => ((x.IsImport && !x.IsExport) || (!x.IsImport && x.IsExport)) && x.DateScale2.HasValue).OrderBy(x => x.CustomerName).ThenByDescending(x => x.DateScale2);
+            List<eScaleInfomation> lstResult = new List<eScaleInfomation>();
+
+            lstResult.AddRange(lstImport);
+            lstResult.AddRange(lstExport);
+
+            return lstResult;
+        }
+
+        public eScaleInfomation getEntry(int KeyID)
+        {
+            try
+            {
+                _accessModel = new aModel();
+                return _accessModel.eScaleInfomations.Find(KeyID) ?? new eScaleInfomation() { IsEnable = true, CreatedDate = DateTime.Now.ServerNow() };
+            }
+            catch { return new eScaleInfomation() { IsEnable = true, CreatedDate = DateTime.Now.ServerNow() }; }
+        }
+
+        public eScaleInfomation getItemNotFinish(string VehicleNumber)
+        {
+            db = new aModel();
+            IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IsEnable && !x.DateScale2.HasValue && x.IDAgency == clsGeneral.curAgency.KeyID && x.VehicleNumber.Equals(VehicleNumber));
+            lstTemp = lstTemp.Where(x => x.CreatedDate.Date >= DateTime.Now.ServerNow().Date && x.CreatedDate.Date <= DateTime.Now.ServerNow().Date);
+            return lstTemp.FirstOrDefault() ?? new eScaleInfomation();
+        }
+
+        public bool deleteEntry(int keyID)
+        {
+            try
+            {
+                _accessModel = new aModel();
+                var item = _accessModel.eCustomers.Find(keyID);
+                item.Status = 3;
+                _accessModel.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+        public bool accessEntry(eScaleInfomation _acEntry)
+        {
+            bool bRe = false;
+            try
+            {
+                _accessModel = _accessModel ?? new aModel();
+                if (_acEntry.DateScale2.HasValue && _accessModel.eVehicleEmpties.Any(x => x.VehicleNumber.Equals(_acEntry.VehicleNumber) && x.IsEnable))
+                {
+                    var item = _accessModel.eVehicleEmpties.FirstOrDefault(x => x.IDAgency == _acEntry.IDAgency && x.VehicleNumber.Equals(_acEntry.VehicleNumber));
+                    item.EmptyWeight = _acEntry.Weight1 > _acEntry.Weight2 ? _acEntry.Weight2 : _acEntry.Weight1;
+                    item.ModifiedDate = DateTime.Now.ServerNow();
+                }
+                _accessModel.eScaleInfomations.AddOrUpdate<eScaleInfomation>(_acEntry);
+                _accessModel.SaveChanges();
+                bRe = true;
+            }
+            catch { bRe = false; }
+            return bRe;
+        }
+        #endregion
+    }
+}
