@@ -1039,18 +1039,17 @@ namespace ChuongTrinhCan.GUI.Common
                             addNewWarehouse(lok, lok.Text.Trim());
                     }
                 }
-                //if (sender is SearchControl && ((Control)sender).Name.Equals(src_Input_SoXe.Name))
-                //{
-                //    SearchControl src = sender as SearchControl;
-                //    if (!grvThongTin.IsFocusedView && status == 1)
-                //    {
-                //        btnCan.Enabled = true;
-                //        btnSave.Enabled = true;
-                //        _iEntry = clsScaleInfomation.Instance.getItemNotFinish(src_Input_SoXe.Text.Trim());
-                //        _aEntry = clsScaleInfomation.Instance.getEntry(_iEntry.KeyID);
-                //        setInfomation();
-                //    }
-                //}
+                if (sender is SearchControl && ((Control)sender).Name.Equals(src_Input_SoXe.Name))
+                {
+                    SearchControl src = sender as SearchControl;
+                    eVehicleEmpty vehicle = clsVehicleEmpty.Instance.getVehicleWeight(src.Text.Trim());
+                    string msg = "Tìm thấy xác xe " + src.Text.Trim();
+                    if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString("#,#") + " KG\nBạn có muốn sử dụng khối lượng này?"))
+                    {
+                        sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString("#,#");
+                        setWeight(0);
+                    }
+                }
                 GetNextControlInput(sender as Control);
             }
         }

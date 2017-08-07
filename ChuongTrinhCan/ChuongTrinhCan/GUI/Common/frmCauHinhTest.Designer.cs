@@ -203,7 +203,6 @@
             // 
             // timeSendData
             // 
-            this.timeSendData.Interval = 1;
             this.timeSendData.Tick += new System.EventHandler(this.timeSendData_Tick);
             // 
             // frmCauHinhTest
