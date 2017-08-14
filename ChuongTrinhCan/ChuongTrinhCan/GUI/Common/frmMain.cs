@@ -740,30 +740,10 @@ namespace ChuongTrinhCan.GUI.Common
         {
             rptPhieuCan rpt = new rptPhieuCan();
             List<eScaleInfomation> lst = new List<eScaleInfomation>();
-            eScaleInfomation info = new eScaleInfomation();
-            info.Code = _aEntry.Code;
-            info.VehicleNumber = _aEntry.VehicleNumber;
-            info.CustomerName = _aEntry.CustomerName;
-            info.ProductName = _aEntry.ProductName;
-            info.ExportName = _aEntry.ExportName;
-            info.WarehouseName = _aEntry.WarehouseName;
-            info.Note = _aEntry.Note;
-            info.DateScale1 = _aEntry.KeyID > 0 ? _aEntry.DateScale1 : DateTime.Now.ServerNow();
-            info.DateScale2 = _aEntry.DateScale2;
-            if (_aEntry.Weight1 > _aEntry.Weight2)
-            {
-                info.Weight1 = _aEntry.Weight1;
-                info.Weight2 = _aEntry.Weight2;
-            }
-            else
-            {
-                info.Weight1 = _aEntry.Weight2;
-                info.Weight2 = _aEntry.Weight1;
-            }
-            info.WeightProduct = _aEntry.WeightProduct;
-            info.Price = _aEntry.Price;
-            info.TotalPrice = _aEntry.TotalPrice;
+            eScaleInfomation info = (grvThongTin.GetFocusedRow() as eScaleInfomation) ?? new eScaleInfomation();
+
             lst.Add(info);
+
             rpt.DataSource = lst;
             rpt.Parameters["_Name"].Value = clsGeneral.curAgency.Name;
             rpt.Parameters["_Address"].Value = clsGeneral.curAgency.Address;
