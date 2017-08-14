@@ -447,12 +447,12 @@ namespace ChuongTrinhCan.Module
                 }
             }
 
-            if (e.RowHandle == view.FocusedRowHandle)
-            {
-                e.Appearance.Options.UseBackColor = true;
-                e.Appearance.BackColor = MyColor.GridDefaultRow;
-                e.Appearance.BackColor2 = MyColor.GridDefaultRow;
-            }
+            //if (e.RowHandle == view.FocusedRowHandle)
+            //{
+            //    e.Appearance.Options.UseBackColor = true;
+            //    e.Appearance.BackColor = MyColor.GridDefaultRow;
+            //    e.Appearance.BackColor2 = MyColor.GridDefaultRow;
+            //}
         }
 
         public static void SumResult(this GridView grvMain)

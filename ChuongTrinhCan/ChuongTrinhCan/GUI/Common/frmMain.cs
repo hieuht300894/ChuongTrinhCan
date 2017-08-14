@@ -623,6 +623,24 @@ namespace ChuongTrinhCan.GUI.Common
             }
         }
 
+        private void LoadNewScale()
+        {
+            clsGeneral.CallWaitForm(this);
+            isFilter = false;
+            status = 1;
+            posWeight = 0;
+            int KeyID = _aEntry.KeyID;
+            _iEntry = _aEntry = null;
+            initData();
+            btnCan.Enabled = true;
+
+            grvThongTin.FocusedRowHandle = grvThongTin.LocateByValue("KeyID", KeyID);
+            grvThongTin.ClearSelection();
+            grvThongTin.SelectRow(grvThongTin.LocateByValue("KeyID", KeyID));
+            // src_Input_SoXe.Select();
+            clsGeneral.CloseWaitForm();
+        }
+
         private void loadDataForm()
         {
             resetToDefault();
@@ -651,13 +669,13 @@ namespace ChuongTrinhCan.GUI.Common
 
             if (_aEntry.KeyID == 0 || !_aEntry.DateScale2.HasValue)
             {
-                eVehicleEmpty vehicle = clsVehicleEmpty.Instance.getVehicleWeight(src_Input_SoXe.Text.Trim());
-                string msg = "Tìm thấy xác xe " + src_Input_SoXe.Text.Trim();
-                if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString("#,#") + " KG\nBạn có muốn sử dụng khối lượng này?"))
-                {
-                    sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString("#,#");
-                    setWeight(0);
-                }
+                //eVehicleEmpty vehicle = clsVehicleEmpty.Instance.getVehicleWeight(src_Input_SoXe.Text.Trim());
+                //string msg = "Tìm thấy xác xe " + src_Input_SoXe.Text.Trim();
+                //if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString("#,#") + " KG\nBạn có muốn sử dụng khối lượng này?"))
+                //{
+                //    sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString("#,#");
+                //    setWeight(0);
+                //}
                 posWeight = string.IsNullOrEmpty(sptKL2.Text) ? 2 : posWeight;
                 posWeight = string.IsNullOrEmpty(sptKL1.Text) ? 1 : posWeight;
             }
@@ -809,6 +827,7 @@ namespace ChuongTrinhCan.GUI.Common
 
             _iEntry = _iEntry ?? new eScaleInfomation();
             _aEntry = clsScaleInfomation.Instance.getEntry(_iEntry.KeyID);
+            DateTime time = DateTime.Now.ServerNow();
 
             _aEntry.VehicleNumber = src_Input_SoXe.Text.Trim();
             _aEntry.IDCustomer = lok_Input_KH.ToInt32();
@@ -827,7 +846,7 @@ namespace ChuongTrinhCan.GUI.Common
                 eCustomer item = clsCustomer.Instance.getEntry(lok_Input_KH.ToInt32());
                 item.Code = _aEntry.CustomerName.NoSign().NoSpace();
                 item.Name = _aEntry.CustomerName;
-                item.CreatedDate = DateTime.Now.ServerNow();
+                item.CreatedDate = time;
                 item.Status = 1;
                 if (clsCustomer.Instance.accessEntry(item))
                 {
@@ -846,7 +865,7 @@ namespace ChuongTrinhCan.GUI.Common
                 eProduct item = clsProduct.Instance.getEntry(lok_Input_SP.ToInt32());
                 item.Code = _aEntry.ProductName.NoSign().NoSpace();
                 item.Name = _aEntry.ProductName;
-                item.CreatedDate = DateTime.Now.ServerNow();
+                item.CreatedDate = time;
                 item.Status = 1;
                 if (clsProduct.Instance.accessEntry(item))
                 {
@@ -865,7 +884,7 @@ namespace ChuongTrinhCan.GUI.Common
                 eWarehouse item = clsWarehouse.Instance.getEntry(lok_Input_Kho.ToInt32());
                 item.Code = _aEntry.WarehouseName.NoSign().NoSpace();
                 item.Name = _aEntry.WarehouseName;
-                item.CreatedDate = DateTime.Now.ServerNow();
+                item.CreatedDate = time;
                 if (clsWarehouse.Instance.accessEntry(item))
                 {
                     _aEntry.IDWarehouse = item.KeyID;
@@ -882,18 +901,24 @@ namespace ChuongTrinhCan.GUI.Common
             {
                 _aEntry.IDAgency = clsGeneral.curAgency.KeyID;
                 _aEntry.Code = txtMaPhieu.Text.Trim();
-                _aEntry.CreatedDate = DateTime.Now.ServerNow();
-                _aEntry.DateScale1 = DateTime.Now.ServerNow();
+                _aEntry.CreatedDate = time;
+                _aEntry.DateScale1 = time;
             }
 
             if (!_aEntry.DateScale2.HasValue && !string.IsNullOrEmpty(sptKL2.Text))
-                _aEntry.DateScale2 = DateTime.Now.ServerNow();
+                _aEntry.DateScale2 = time;
 
             _aEntry.Weight1 = string.IsNullOrEmpty(sptKL1.Text) ? 0 : Convert.ToDecimal(sptKL1.Text);
             _aEntry.Weight2 = string.IsNullOrEmpty(sptKL2.Text) ? 0 : Convert.ToDecimal(sptKL2.Text);
 
+            decimal EmptyWeight = 0;
             if (!string.IsNullOrEmpty(sptKL1.Text) && !string.IsNullOrEmpty(sptKL2.Text) && !string.IsNullOrEmpty(sptKLHang.Text))
             {
+                eVehicleEmpty vehicle = clsVehicleEmpty.Instance.getVehicleWeight(src_Input_SoXe.Text.Trim());
+                if (vehicle != null && Math.Abs(vehicle.EmptyWeight - _aEntry.Weight2) > 100 && clsGeneral.showConfirmMessage("Xác nhận cập nhật xác xe?"))
+                    EmptyWeight = _aEntry.Weight2;
+
+
                 _aEntry.WeightProduct = Convert.ToDecimal(sptKLHang.Text);
                 if (_aEntry.Weight1 > _aEntry.Weight2)
                 {
@@ -907,13 +932,16 @@ namespace ChuongTrinhCan.GUI.Common
                 }
             }
 
-            chk = clsScaleInfomation.Instance.accessEntry(_aEntry);
+            chk = clsScaleInfomation.Instance.accessEntry(_aEntry, EmptyWeight);
+            //if (chk)
+            //{
+            //    _iEntry.KeyID = _aEntry.KeyID;
+            //    if (isFilter) loadFilter(_aEntry.KeyID, !isFindAll);
+            //    else loadFilter(_aEntry.KeyID, DateTime.Now.ServerNow(), DateTime.Now.ServerNow());
+            //}
+
             if (chk)
-            {
-                _iEntry.KeyID = _aEntry.KeyID;
-                if (isFilter) loadFilter(_aEntry.KeyID, !isFindAll);
-                else loadFilter(_aEntry.KeyID, DateTime.Now.ServerNow(), DateTime.Now.ServerNow());
-            }
+                LoadNewScale();
             return chk;
         }
 
@@ -1223,37 +1251,20 @@ namespace ChuongTrinhCan.GUI.Common
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            clsGeneral.CallWaitForm(this);
             if (validationForm())
             {
                 if (saveData(false))
                 {
-                    btnCan.Enabled = false;
-                    btnPrint.Select();
-                    clsGeneral.CloseWaitForm();
+                    //btnCan.Enabled = false;
+                    //btnPrint.Select();
                 }
-                else
-                {
-                    clsGeneral.CloseWaitForm();
-                    clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại");
-                }
+                else { clsGeneral.showMessage("Lưu dữ liệu không thành công.\r\nVui lòng kiểm tra lại"); }
             }
-            else
-                clsGeneral.CloseWaitForm();
-
         }
 
         private void btnCanMoi_Click(object sender, EventArgs e)
         {
-            clsGeneral.CallWaitForm(this);
-            isFilter = false;
-            status = 1;
-            posWeight = 0;
-            _iEntry = _aEntry = null;
-            initData();
-            btnCan.Enabled = true;
-            src_Input_SoXe.Select();
-            clsGeneral.CloseWaitForm();
+            LoadNewScale();
         }
 
         private void btnPrint_Click(object sender, EventArgs e)

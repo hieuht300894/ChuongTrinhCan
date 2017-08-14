@@ -161,19 +161,20 @@ namespace ChuongTrinhCan.BLL.CATE
             catch { return false; }
         }
 
-        public bool accessEntry(eScaleInfomation _acEntry)
+        public bool accessEntry(eScaleInfomation _acEntry, decimal EmptyWeight = 0)
         {
             bool bRe = false;
             try
             {
                 _accessModel = _accessModel ?? new aModel();
-                if (_acEntry.DateScale2.HasValue && _accessModel.eVehicleEmpties.Any(x => x.VehicleNumber.Equals(_acEntry.VehicleNumber) && x.IsEnable))
+                var item = _accessModel.eVehicleEmpties.FirstOrDefault(x => x.IDAgency == _acEntry.IDAgency && x.IsEnable && x.VehicleNumber.Equals(_acEntry.VehicleNumber));
+                if (_acEntry.DateScale2.HasValue && item != null && EmptyWeight > 0)
                 {
-                    var item = _accessModel.eVehicleEmpties.FirstOrDefault(x => x.IDAgency == _acEntry.IDAgency && x.VehicleNumber.Equals(_acEntry.VehicleNumber));
-                    item.EmptyWeight = _acEntry.Weight1 > _acEntry.Weight2 ? _acEntry.Weight2 : _acEntry.Weight1;
+                    //item.EmptyWeight = _acEntry.Weight1 > _acEntry.Weight2 ? _acEntry.Weight2 : _acEntry.Weight1;
+                    item.EmptyWeight = EmptyWeight;
                     item.ModifiedDate = DateTime.Now.ServerNow();
                 }
-                _accessModel.eScaleInfomations.AddOrUpdate<eScaleInfomation>(_acEntry);
+                _accessModel.eScaleInfomations.AddOrUpdate(_acEntry);
                 _accessModel.SaveChanges();
                 bRe = true;
             }
