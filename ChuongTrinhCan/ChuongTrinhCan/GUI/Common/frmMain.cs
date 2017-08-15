@@ -629,15 +629,13 @@ namespace ChuongTrinhCan.GUI.Common
             isFilter = false;
             status = 1;
             posWeight = 0;
-            int KeyID = _aEntry.KeyID;
+            int KeyID = _aEntry != null ? _aEntry.KeyID : 0;
             _iEntry = _aEntry = null;
             initData();
             btnCan.Enabled = true;
-
-            grvThongTin.FocusedRowHandle = grvThongTin.LocateByValue("KeyID", KeyID);
             grvThongTin.ClearSelection();
             grvThongTin.SelectRow(grvThongTin.LocateByValue("KeyID", KeyID));
-            // src_Input_SoXe.Select();
+            src_Input_SoXe.Select();
             clsGeneral.CloseWaitForm();
         }
 
