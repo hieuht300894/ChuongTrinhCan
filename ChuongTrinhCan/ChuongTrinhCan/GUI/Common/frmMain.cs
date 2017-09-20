@@ -635,6 +635,7 @@ namespace ChuongTrinhCan.GUI.Common
             btnCan.Enabled = true;
             grvThongTin.ClearSelection();
             grvThongTin.SelectRow(grvThongTin.LocateByValue("KeyID", KeyID));
+            grvThongTin.FocusedRowHandle = grvThongTin.LocateByValue("KeyID", KeyID);
             src_Input_SoXe.Select();
             clsGeneral.CloseWaitForm();
         }

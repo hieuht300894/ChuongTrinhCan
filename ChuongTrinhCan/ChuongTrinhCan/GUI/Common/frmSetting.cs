@@ -66,7 +66,7 @@ namespace ChuongTrinhCan.GUI.Common
                 cbbDatabase.Properties.Items.AddRange(lstDatabase);
                 cbbDatabase.Enabled = true;
                 btnLuu.Enabled = true;
-                cbbDatabase.EditValue = "ChuongTrinhCan";
+                cbbDatabase.EditValue = "PhuocLoi";
             }
             else
             {
