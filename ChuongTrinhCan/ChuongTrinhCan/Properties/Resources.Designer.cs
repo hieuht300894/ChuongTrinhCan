@@ -109,5 +109,14 @@ namespace ChuongTrinhCan.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #,##0.
+        /// </summary>
+        internal static string NumberFormat {
+            get {
+                return ResourceManager.GetString("NumberFormat", resourceCulture);
+            }
+        }
     }
 }
