@@ -659,9 +659,9 @@ namespace ChuongTrinhCan.GUI.Common
                 lok_Input_Kho.EditValue = _aEntry.IDWarehouse;
             if (_aEntry.IDProduct > 0)
                 lok_Input_SP.EditValue = _aEntry.IDProduct;
-            sptKL1.Text = _aEntry.Weight1 == 0 ? string.Empty : _aEntry.Weight1.ToString("#,#");
-            sptKL2.Text = _aEntry.Weight2 == 0 ? string.Empty : _aEntry.Weight2.ToString("#,#");
-            sptKLHang.Text = _aEntry.WeightProduct == 0 ? string.Empty : _aEntry.WeightProduct.ToString("#,#");
+            sptKL1.Text = _aEntry.Weight1 == 0 ? string.Empty : _aEntry.Weight1.ToString(Properties.Resources.NumberFormat);
+            sptKL2.Text = _aEntry.Weight2 == 0 ? string.Empty : _aEntry.Weight2.ToString(Properties.Resources.NumberFormat);
+            sptKLHang.Text = _aEntry.WeightProduct == 0 ? string.Empty : _aEntry.WeightProduct.ToString(Properties.Resources.NumberFormat);
             sptDonGia.Value = _aEntry.Price;
             sptThanhTien.Value = _aEntry.TotalPrice;
             mmeGhiChu.EditValue = _aEntry.Note;
@@ -670,9 +670,9 @@ namespace ChuongTrinhCan.GUI.Common
             {
                 //eVehicleEmpty vehicle = clsVehicleEmpty.Instance.getVehicleWeight(src_Input_SoXe.Text.Trim());
                 //string msg = "Tìm thấy xác xe " + src_Input_SoXe.Text.Trim();
-                //if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString("#,#") + " KG\nBạn có muốn sử dụng khối lượng này?"))
+                //if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString(Properties.Resources.NumberFormat) + " KG\nBạn có muốn sử dụng khối lượng này?"))
                 //{
-                //    sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString("#,#");
+                //    sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString(Properties.Resources.NumberFormat);
                 //    setWeight(0);
                 //}
                 posWeight = string.IsNullOrEmpty(sptKL2.Text) ? 2 : posWeight;
@@ -690,9 +690,9 @@ namespace ChuongTrinhCan.GUI.Common
                 lok_Input_Kho.EditValue = _aEntry.IDWarehouse;
             if (_aEntry.IDProduct > 0)
                 lok_Input_SP.EditValue = _aEntry.IDProduct;
-            sptKL1.Text = _aEntry.Weight1 == 0 ? string.Empty : _aEntry.Weight1.ToString("#,#");
-            sptKL2.Text = _aEntry.Weight2 == 0 ? string.Empty : _aEntry.Weight2.ToString("#,#");
-            sptKLHang.Text = _aEntry.WeightProduct == 0 ? string.Empty : _aEntry.WeightProduct.ToString("#,#");
+            sptKL1.Text = _aEntry.Weight1 == 0 ? string.Empty : _aEntry.Weight1.ToString(Properties.Resources.NumberFormat);
+            sptKL2.Text = _aEntry.Weight2 == 0 ? string.Empty : _aEntry.Weight2.ToString(Properties.Resources.NumberFormat);
+            sptKLHang.Text = _aEntry.WeightProduct == 0 ? string.Empty : _aEntry.WeightProduct.ToString(Properties.Resources.NumberFormat);
             sptDonGia.Value = _aEntry.Price;
             sptThanhTien.Value = _aEntry.TotalPrice;
             mmeGhiChu.EditValue = _aEntry.Note;
@@ -701,9 +701,9 @@ namespace ChuongTrinhCan.GUI.Common
             {
                 eVehicleEmpty vehicle = clsVehicleEmpty.Instance.getVehicleWeight(src_Input_SoXe.Text.Trim());
                 string msg = "Tìm thấy xác xe " + src_Input_SoXe.Text.Trim();
-                if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString("#,#") + " KG\nBạn có muốn sử dụng khối lượng này?"))
+                if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString(Properties.Resources.NumberFormat) + " KG\nBạn có muốn sử dụng khối lượng này?"))
                 {
-                    sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString("#,#");
+                    sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString(Properties.Resources.NumberFormat);
                     setWeight(0);
                 }
                 posWeight = string.IsNullOrEmpty(sptKL2.Text) ? 2 : posWeight;
@@ -714,13 +714,13 @@ namespace ChuongTrinhCan.GUI.Common
         private void setWeight(decimal number, int pos = 0)
         {
             if (pos == 1)
-                sptKL1.Text = number == 0 ? string.Empty : number.ToString("#,#");
+                sptKL1.Text = number == 0 ? string.Empty : number.ToString(Properties.Resources.NumberFormat);
             if (pos == 2)
-                sptKL2.Text = number == 0 ? string.Empty : number.ToString("#,#");
+                sptKL2.Text = number == 0 ? string.Empty : number.ToString(Properties.Resources.NumberFormat);
 
             if (!string.IsNullOrEmpty(sptKL1.Text) && !string.IsNullOrEmpty(sptKL2.Text))
             {
-                sptKLHang.Text = Math.Abs(Convert.ToDecimal(sptKL1.Text) - Convert.ToDecimal(sptKL2.Text)).ToString("#,#");
+                sptKLHang.Text = Math.Abs(Convert.ToDecimal(sptKL1.Text) - Convert.ToDecimal(sptKL2.Text)).ToString(Properties.Resources.NumberFormat);
                 sptThanhTien.Value = sptDonGia.Value * Convert.ToDecimal(string.IsNullOrEmpty(sptKLHang.Text) ? "0" : sptKLHang.Text);
             }
         }
@@ -1051,9 +1051,9 @@ namespace ChuongTrinhCan.GUI.Common
                     SearchControl src = sender as SearchControl;
                     eVehicleEmpty vehicle = clsVehicleEmpty.Instance.getVehicleWeight(src.Text.Trim());
                     string msg = "Tìm thấy xác xe " + src.Text.Trim();
-                    if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString("#,#") + " KG\nBạn có muốn sử dụng khối lượng này?"))
+                    if (vehicle != null && clsGeneral.showConfirmMessage(msg + "=" + vehicle.EmptyWeight.ToString(Properties.Resources.NumberFormat) + " KG\nBạn có muốn sử dụng khối lượng này?"))
                     {
-                        sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString("#,#");
+                        sptKL2.Text = vehicle.EmptyWeight == 0 ? string.Empty : vehicle.EmptyWeight.ToString(Properties.Resources.NumberFormat);
                         setWeight(0);
                     }
                 }

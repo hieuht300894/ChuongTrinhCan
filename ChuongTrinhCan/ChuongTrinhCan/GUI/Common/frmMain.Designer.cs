@@ -729,6 +729,8 @@
             // 
             this.colWeight1.Caption = "KL lần 1";
             this.colWeight1.ColumnEdit = this.rsptNumber;
+            this.colWeight1.DisplayFormat.FormatString = "#.##0";
+            this.colWeight1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
             this.colWeight1.FieldName = "Weight1";
             this.colWeight1.Name = "colWeight1";
             this.colWeight1.OptionsColumn.AllowEdit = false;
