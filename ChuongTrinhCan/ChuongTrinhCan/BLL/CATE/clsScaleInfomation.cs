@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity.Migrations;
+using System.IO;
+using System.Text;
 
 namespace ChuongTrinhCan.BLL.CATE
 {
@@ -163,23 +165,43 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public bool accessEntry(eScaleInfomation _acEntry, decimal EmptyWeight = 0)
         {
-            bool bRe = false;
+            DateTime time = DateTime.Now.ServerNow();
             try
             {
                 _accessModel = _accessModel ?? new aModel();
-                var item = _accessModel.eVehicleEmpties.FirstOrDefault(x => x.IDAgency == _acEntry.IDAgency && x.IsEnable && x.VehicleNumber.Equals(_acEntry.VehicleNumber));
+                var item = _accessModel.eVehicleEmpties.FirstOrDefault(x => x.IDAgency == _acEntry.IDAgency && x.IsEnable && x.VehicleNumber.ToLower().Equals(_acEntry.VehicleNumber.ToLower()));
+
                 if (_acEntry.DateScale2.HasValue && item != null && EmptyWeight > 0)
                 {
-                    //item.EmptyWeight = _acEntry.Weight1 > _acEntry.Weight2 ? _acEntry.Weight2 : _acEntry.Weight1;
                     item.EmptyWeight = EmptyWeight;
-                    item.ModifiedDate = DateTime.Now.ServerNow();
+                    item.ModifiedDate = time;
                 }
                 _accessModel.eScaleInfomations.AddOrUpdate(_acEntry);
                 _accessModel.SaveChanges();
-                bRe = true;
+                return true;
             }
-            catch { bRe = false; }
-            return bRe;
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void createLogFile(string content)
+        {
+            try
+            {
+                if (!Directory.Exists(@"Logs"))
+                    Directory.CreateDirectory("Logs");
+                if (!File.Exists(@"Logs/log.txt"))
+                    File.Create(@"Logs/log.txt").Close();
+
+                File.AppendAllText(@"Logs/log.txt", content);
+                //StreamWriter sw = new StreamWriter(@"Logs/log.txt");
+                //sw.WriteLine("\n");
+                //sw.WriteLine(content);
+                //sw.Close();
+            }
+            catch (Exception ex) { }
         }
         #endregion
     }
