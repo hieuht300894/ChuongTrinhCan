@@ -756,7 +756,7 @@ namespace ChuongTrinhCan.Module
             //}
             //if (string.IsNullOrEmpty(fName) || lokMain.Properties.Columns.Count == 0 || !lokMain.Properties.ShowHeader) return;
 
-            //db = new aModel();
+            //db = new zModel();
             //List<xDisplay> lstAdd = new List<xDisplay>();
 
             //bool addCol = false;
@@ -830,7 +830,7 @@ namespace ChuongTrinhCan.Module
             //{
             //    try
             //    {
-            //        db = new aModel();
+            //        db = new zModel();
             //        db.xDisplays.AddRange(lstAdd);
             //        db.SaveChanges();
             //    }
@@ -910,7 +910,7 @@ namespace ChuongTrinhCan.Module
 
         public static void FormatColumnRepositoryLookUpEdit(this RepositoryItemLookUpEdit rlokMain)
         {
-            //db = new aModel();
+            //db = new zModel();
             //List<xDisplay> lstAdd = new List<xDisplay>();
 
             //bool addCol = false;
@@ -986,7 +986,7 @@ namespace ChuongTrinhCan.Module
             //{
             //    try
             //    {
-            //        db = new aModel();
+            //        db = new zModel();
             //        db.xDisplays.AddRange(lstAdd);
             //        db.SaveChanges();
             //    }

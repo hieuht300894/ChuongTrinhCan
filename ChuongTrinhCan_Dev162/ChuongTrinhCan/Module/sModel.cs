@@ -1,12 +1,11 @@
-﻿using EntityModel.DataModel;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 
 namespace ChuongTrinhCan.Module
 {
-    public partial class sModel : zModel
+    public partial class sModel : DbContext
     {
         public sModel() :
-            base(clsEntity.serverConnectionString)
+            base(EntityModel.Module.dbConnectString_Server)
         {
         }
 

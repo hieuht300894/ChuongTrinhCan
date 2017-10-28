@@ -34,11 +34,11 @@ namespace ChuongTrinhCan.BLL.CATE
         #endregion
 
         #region Functions
-        aModel db, _accessModel;
+        zModel db, _accessModel;
 
         public IList<eCustomer> getAllCustomer()
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID);
 
             IList<eCustomer> lstResult = lstTemp.ToList<eCustomer>();
@@ -47,7 +47,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eCustomer> getAllCustomer(string msg, bool IsEnable)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID && n.IsEnable == IsEnable);
 
             IList<eCustomer> lstResult = lstTemp.ToList<eCustomer>();
@@ -57,7 +57,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eCustomer> searchCustomer(bool IsEnable)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3);
 
             IList<eCustomer> lstResult = lstTemp.ToList<eCustomer>();
@@ -66,7 +66,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eCustomer> searchCustomer(bool IsEnable, int KeyID)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3 || n.KeyID == KeyID);
 
             IList<eCustomer> lstResult = lstTemp.ToList<eCustomer>();
@@ -75,7 +75,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eCustomer> searchCustomer(eCustomer eFilter)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID && n.IsEnable == eFilter.IsEnable && n.Status != 3);
 
             if (!string.IsNullOrEmpty(eFilter.Code))
@@ -92,7 +92,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public eCustomer getCustomerByID(int KeyID)
         {
-            db = new aModel();
+            db = new zModel();
             return db.eCustomers.Find(KeyID) ?? new eCustomer();
         }
 
@@ -100,7 +100,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 return _accessModel.eCustomers.Find(KeyID) ?? new eCustomer() { IsEnable = true, IsScale = true, IDAgency = clsGeneral.curAgency.KeyID };
             }
             catch { return new eCustomer() { IsEnable = true, IsScale = true, IDAgency = clsGeneral.curAgency.KeyID }; }
@@ -110,7 +110,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 var item = _accessModel.eCustomers.Find(keyID);
                 item.Status = 3;
                 _accessModel.SaveChanges();
@@ -123,7 +123,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 foreach (int id in ids)
                 {
                     var item = _accessModel.eCustomers.Find(id);
@@ -140,7 +140,7 @@ namespace ChuongTrinhCan.BLL.CATE
             bool bRe = false;
             try
             {
-                _accessModel = _accessModel ?? new aModel();
+                _accessModel = _accessModel ?? new zModel();
                 _accessModel.eCustomers.AddOrUpdate<eCustomer>(_acEntry);
                 _accessModel.SaveChanges();
                 bRe = true;
@@ -153,7 +153,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 foreach (int id in lstID)
                 {
                     var item = _accessModel.eCustomers.Find(id);

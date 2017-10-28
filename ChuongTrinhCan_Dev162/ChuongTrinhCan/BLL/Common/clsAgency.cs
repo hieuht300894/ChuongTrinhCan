@@ -31,10 +31,10 @@ namespace ChuongTrinhCan.BLL.Common
         }
         #endregion
 
-        aModel db, accessModel;
+        zModel db, accessModel;
         public List<eAgency> GetAllAgency()
         {
-            accessModel = new aModel();
+            accessModel = new zModel();
             List<eAgency> lstResult = accessModel.eAgencies.ToList<eAgency>();
             lstResult.Insert(0, new eAgency() { KeyID = 0, Name = "Not Selected", IsEnable = true });
             return lstResult;
@@ -42,7 +42,7 @@ namespace ChuongTrinhCan.BLL.Common
 
         public eAgency GetAgency(int keyID)
         {
-            db = new aModel();
+            db = new zModel();
             return db.eAgencies.Find(keyID) ?? new eAgency();
         }
 
@@ -50,7 +50,7 @@ namespace ChuongTrinhCan.BLL.Common
         {
             try
             {
-                accessModel = accessModel ?? new aModel();
+                accessModel = accessModel ?? new zModel();
                 accessModel.eAgencies.AddOrUpdate(aEntry);
                 accessModel.SaveChanges();
                 return true;

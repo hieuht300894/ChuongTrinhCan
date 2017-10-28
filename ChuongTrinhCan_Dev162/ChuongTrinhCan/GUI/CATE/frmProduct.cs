@@ -147,13 +147,11 @@ namespace ChuongTrinhCan.GUI.CATE
             {
                 _acEntry.IDAgency = clsGeneral.curAgency.KeyID;
                 _acEntry.Code = txtCode.Text.Trim().ToUpper();
-                _acEntry.CreatedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.CreatedDate = DateTime.Now.ServerNow();
                 _acEntry.Status = 1;
             }
             else
             {
-                _acEntry.ModifiedBy = clsGeneral.curPersonnel.KeyID;
                 _acEntry.ModifiedDate = DateTime.Now.ServerNow();
                 _acEntry.Status = 2;
             }

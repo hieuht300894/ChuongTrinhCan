@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Security.Cryptography;
-using System.IO;
-using System.Diagnostics;
-using System.Windows.Forms;
-using System.Net;
-using System.Text.RegularExpressions;
+﻿using DevExpress.XtraEditors;
 using DevExpress.XtraSplashScreen;
-using DevExpress.XtraEditors;
-using System.Data;
-using System.Reflection;
 using EntityModel.DataModel;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.IO;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ChuongTrinhCan.Module
 {
     public static class clsGeneral
     {
         #region User
-        public static ePersonnel curPersonnel = new ePersonnel();
         public static eAgency curAgency = new eAgency();
-        public static eAccount curAccount = new eAccount();
-        public static xUserFeature curUserFeature = new xUserFeature();
-        public static eFactory curFactory = new eFactory();
         #endregion
 
         #region Mã hóa và giải mã

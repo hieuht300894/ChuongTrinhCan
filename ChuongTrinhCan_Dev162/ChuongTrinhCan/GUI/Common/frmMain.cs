@@ -322,7 +322,7 @@ namespace ChuongTrinhCan.GUI.Common
                 _conString = "data source={0};initial catalog={1};Integrated Security={2};user id={3};password={4};MultipleActiveResultSets=True;App=EntityFramework";
             else
                 _conString = "data source={0};initial catalog={1};Integrated Security={2};MultipleActiveResultSets=True;App=EntityFramework";
-            EntityModel.Module.dbConnectString = string.Format(_conString, _sName, _sDatabase, _wAu, _sUser, _sPass);
+            EntityModel.Module.dbConnectString_Client = string.Format(_conString, _sName, _sDatabase, _wAu, _sUser, _sPass);
             EntityModel.Module.InitDefaultData();
 
             fDate.DateTime = tDate.DateTime = deNgayCan.DateTime = DateTime.Now.ServerNow();

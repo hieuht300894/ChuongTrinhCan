@@ -9,14 +9,6 @@ using ChuongTrinhCan.Module;
 
 namespace ChuongTrinhCan.BLL.CATE
 {
-    public class Product_Temp
-    {
-        public int KeyID { get; set; }
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public decimal Remain { get; set; }
-    }
     public class clsProduct
     {
         #region Constructor
@@ -42,10 +34,10 @@ namespace ChuongTrinhCan.BLL.CATE
 
         #region Functions
 
-        aModel db, _accessModel;
+        zModel db, _accessModel;
         public IList<eProduct> getAllProduct()
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3);
 
             IEnumerable<eProduct> lstOrder = lstTemp.OrderByDescending(x => x.Status).ThenBy(x => x.Code);
@@ -55,7 +47,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eProduct> searchProduct(bool IsEnable)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3);
 
             IEnumerable<eProduct> lstOrder = lstTemp.OrderByDescending(x => x.Status).ThenBy(x => x.Code);
@@ -65,7 +57,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eProduct> searchProduct(bool IsEnable, int KeyID)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3 || n.KeyID == KeyID);
 
             IEnumerable<eProduct> lstOrder = lstTemp.OrderByDescending(x => x.Status).ThenBy(x => x.Code);
@@ -75,7 +67,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public eProduct getProductByID(int KeyID)
         {
-            db = new aModel();
+            db = new zModel();
             return db.eProducts.Find(KeyID) ?? new eProduct();
         }
 
@@ -84,7 +76,7 @@ namespace ChuongTrinhCan.BLL.CATE
             bool bRe = false;
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 eProduct item = _accessModel.eProducts.Find(KeyID);
                 item.Status = 3;
                 _accessModel.SaveChanges();
@@ -99,7 +91,7 @@ namespace ChuongTrinhCan.BLL.CATE
             bool bRe = false;
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 foreach (int id in ids)
                 {
                     eProduct item = _accessModel.eProducts.Find(id);
@@ -115,7 +107,7 @@ namespace ChuongTrinhCan.BLL.CATE
         public bool checkExist(string Ma, int KeyID)
         {
             bool bRe = false;
-            using (aModel db = new aModel())
+            using (zModel db = new zModel())
             {
                 if (KeyID > 0)
                     bRe = db.eProducts.Any(n => n.IDAgency == clsGeneral.curAgency.KeyID && n.KeyID != KeyID && n.Code.ToUpper().Equals(Ma.ToUpper()));
@@ -129,7 +121,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 return _accessModel.eProducts.Find(KeyID) ?? new eProduct() { IsEnable = true, IDAgency = clsGeneral.curAgency.KeyID };
             }
             catch { return new eProduct() { IsEnable = true, IDAgency = clsGeneral.curAgency.KeyID }; }
@@ -140,7 +132,7 @@ namespace ChuongTrinhCan.BLL.CATE
             bool bRe = false;
             try
             {
-                _accessModel = _accessModel ?? new aModel();
+                _accessModel = _accessModel ?? new zModel();
                 _accessModel.eProducts.AddOrUpdate(_acEntry);
                 _accessModel.SaveChanges();
                 bRe = true;
@@ -153,7 +145,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 foreach (int id in lstID)
                 {
                     var item = _accessModel.eProducts.Find(id);

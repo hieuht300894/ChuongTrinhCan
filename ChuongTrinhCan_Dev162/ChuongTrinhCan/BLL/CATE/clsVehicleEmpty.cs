@@ -33,18 +33,18 @@ namespace ChuongTrinhCan.BLL.CATE
         #endregion
 
         #region Functions
-        aModel db, _accessModel;
+        zModel db, _accessModel;
 
         public IList<eVehicleEmpty> getAll()
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eVehicleEmpty> lstTemp = db.eVehicleEmpties.Where(x => x.IsEnable && x.IDAgency == clsGeneral.curAgency.KeyID);
             return lstTemp.ToList();
         }
 
         public eVehicleEmpty getVehicleWeight(string number)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eVehicleEmpty> lstTemp = db.eVehicleEmpties.Where(x => x.IsEnable && x.IDAgency == clsGeneral.curAgency.KeyID && x.VehicleNumber.Equals(number));
             return lstTemp.FirstOrDefault();
         }
@@ -53,7 +53,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                db = new aModel();
+                db = new zModel();
                 IEnumerable<eScaleInfomation> lstScaleInfo = db.eScaleInfomations.Where(x => x.IsEnable && ((!x.IsExport && x.IsImport) || (x.IsExport && !x.IsImport) || x.DateScale2.HasValue) && x.IDAgency == clsGeneral.curAgency.KeyID);
                 IEnumerable<eScaleInfomation> lstOrder = lstScaleInfo.OrderByDescending(x => x.DateScale2.Value);
                 var info = lstOrder.FirstOrDefault();
@@ -64,7 +64,7 @@ namespace ChuongTrinhCan.BLL.CATE
                 {
                     number = info.VehicleNumber;
                     weight = info.Weight1 > info.Weight2 ? info.Weight2 : info.Weight1;
-                    _accessModel = new aModel();
+                    _accessModel = new zModel();
                     return new eVehicleEmpty() { IsEnable = true, VehicleNumber = number, EmptyWeight = weight, IDAgency = clsGeneral.curAgency.KeyID };
                 }
                 return item;
@@ -76,7 +76,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 var item = _accessModel.eVehicleEmpties.Find(keyID);
                 item.IsEnable = false;
                 _accessModel.SaveChanges();
@@ -90,7 +90,7 @@ namespace ChuongTrinhCan.BLL.CATE
             bool bRe = false;
             try
             {
-                _accessModel = _accessModel ?? new aModel();
+                _accessModel = _accessModel ?? new zModel();
                 _accessModel.eVehicleEmpties.RemoveRange(_accessModel.eVehicleEmpties.Where(x => !x.IsEnable && x.VehicleNumber.Equals(_acEntry.VehicleNumber)));
                 _accessModel.eVehicleEmpties.AddOrUpdate<eVehicleEmpty>(_acEntry);
                 _accessModel.SaveChanges();

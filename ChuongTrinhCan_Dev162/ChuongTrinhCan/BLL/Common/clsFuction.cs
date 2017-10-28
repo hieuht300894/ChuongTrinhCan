@@ -40,12 +40,12 @@ namespace ChuongTrinhCan.BLL.Common
         #endregion
 
         #region Functions
-        aModel db, _accessModel;
+        zModel db, _accessModel;
         public T getEntry<T>(int KeyID) where T : class, new()
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 DbSet entity = _accessModel.Set<T>();
                 if (entity == null)
                     return null;
@@ -58,7 +58,7 @@ namespace ChuongTrinhCan.BLL.Common
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 DbSet entity = _accessModel.Set<T>();
                 if (entity == null)
                     return null;
@@ -73,7 +73,7 @@ namespace ChuongTrinhCan.BLL.Common
         {
             try
             {
-                db = new aModel();
+                db = new zModel();
                 DbSet entity = db.Set<T>();
                 if (entity == null)
                     return 0;
@@ -92,7 +92,7 @@ namespace ChuongTrinhCan.BLL.Common
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 DbSet entity = _accessModel.Set<T>();
                 if (entity == null)
                     return null;
@@ -107,7 +107,7 @@ namespace ChuongTrinhCan.BLL.Common
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 DbSet entity = _accessModel.Set<T>();
                 if (entity == null)
                     return false;
@@ -128,7 +128,7 @@ namespace ChuongTrinhCan.BLL.Common
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 DbSet entity = _accessModel.Set<T>();
                 if (entity == null)
                     return false;
@@ -151,7 +151,7 @@ namespace ChuongTrinhCan.BLL.Common
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 DbSet entity = _accessModel.Set<T>();
                 if (entity == null)
                     return false;
@@ -193,7 +193,7 @@ namespace ChuongTrinhCan.BLL.Common
         private Dictionary<string, List<int>> ListEntity;
         private int lenght = 0;
         private int cur = 0;
-        aModel db;
+        zModel db;
         public DeleteEntry(List<int> _ListEntry)
         {
             this.ListEntry = _ListEntry;
@@ -227,7 +227,7 @@ namespace ChuongTrinhCan.BLL.Common
 
         public void StartRun()
         {
-            db = new aModel();
+            db = new zModel();
             timer = new System.Windows.Forms.Timer();
             timer.Tick += timer_Tick;
             timer.Interval = 1000;
@@ -477,7 +477,7 @@ namespace ChuongTrinhCan.BLL.Common
                 //}
                 //db.SaveChangesAsync().Wait();
 
-                //aModel db = new aModel();
+                //zModel db = new zModel();
                 //sModel _db = new sModel();
 
                 //foreach (int id in ListEntry)

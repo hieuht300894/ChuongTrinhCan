@@ -30,7 +30,7 @@ namespace EntityModel
             {
                 db.Database.Initialize(false);
 
-                if (db.eAgency.Count() <= 0)
+                if (db.eAgencies.Count() <= 0)
                 {
                     try
                     {
@@ -46,7 +46,7 @@ namespace EntityModel
                         _eAgency.CreatedDate = DateTime.Today;
                         _eAgency.ModifiedBy = 0;
                         _eAgency.ModifiedDate = DateTime.Today;
-                        db.eAgency.Add(_eAgency);
+                        db.eAgencies.Add(_eAgency);
                         db.SaveChanges();
                     }
                     catch { }

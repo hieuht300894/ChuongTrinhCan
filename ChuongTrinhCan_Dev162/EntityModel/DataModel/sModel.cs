@@ -17,13 +17,13 @@
         {
         }
 
-        public virtual DbSet<eCustomer> eCustomer { get; set; }
-        public virtual DbSet<eProduct> eProduct { get; set; }
-        public virtual DbSet<eWarehouse> eWarehouse { get; set; }
-        public virtual DbSet<eCustomerScale> eCustomerScale { get; set; }
-        public virtual DbSet<eProductScale> eProductScale { get; set; }
-        public virtual DbSet<eWarehouseScale> eWarehouseScale { get; set; }
-        public virtual DbSet<eScaleInfomation> eScaleInfomation { get; set; }
+        public virtual DbSet<eCustomer> eCustomers { get; set; }
+        public virtual DbSet<eProduct> eProducts { get; set; }
+        public virtual DbSet<eWarehouse> eWarehouses { get; set; }
+        public virtual DbSet<eCustomerScale> eCustomerScales { get; set; }
+        public virtual DbSet<eProductScale> eProductScales { get; set; }
+        public virtual DbSet<eWarehouseScale> eWarehouseScales { get; set; }
+        public virtual DbSet<eScaleInfomation> eScaleInfomations { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

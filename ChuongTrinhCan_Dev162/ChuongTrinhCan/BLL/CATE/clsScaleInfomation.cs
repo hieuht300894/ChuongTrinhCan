@@ -33,11 +33,11 @@ namespace ChuongTrinhCan.BLL.CATE
         #endregion
 
         #region Functions
-        aModel db, _accessModel;
+        zModel db, _accessModel;
         public int getID()
         {
             int res = 1;
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID);
             lstTemp = lstTemp.Where(x => x.CreatedDate.Date >= DateTime.Now.ServerNow().Date && x.CreatedDate.Date <= DateTime.Now.ServerNow().Date);
             if (lstTemp.Any())
@@ -47,7 +47,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public string[] getVehicle()
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID);
             string[] arrResult = lstTemp.Select(x => x.VehicleNumber).Distinct().ToArray<string>();
             return arrResult ?? new string[] { };
@@ -55,7 +55,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         //public IList<eScaleInfomation> getAll(DateTime fDate, DateTime tDate, bool IsEnable = true)
         //{
-        //    db = new aModel();
+        //    db = new zModel();
         //    IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID && x.IsEnable == IsEnable);
         //    lstTemp = lstTemp.Where(x => x.CreatedDate.Date >= fDate.Date && x.CreatedDate.Date <= tDate.Date);
 
@@ -70,7 +70,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eScaleInfomation> getAll(DateTime fDate, DateTime tDate)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID && x.IsEnable);
 
             lstTemp = lstTemp.Where(delegate (eScaleInfomation e)
@@ -93,7 +93,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eScaleInfomation> getAll(DateTime fDate, DateTime tDate, bool IsFilter = false, bool? IsImport = null, bool? IsExport = null, string VehicleNumber = "", string CustomerName = "", string WarehouseName = "", string ProductName = "", bool findAll = true)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IDAgency == clsGeneral.curAgency.KeyID && x.IsEnable);
 
             lstTemp = lstTemp.Where(delegate (eScaleInfomation e)
@@ -136,7 +136,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 return _accessModel.eScaleInfomations.Find(KeyID) ?? new eScaleInfomation() { IsEnable = true, CreatedDate = DateTime.Now.ServerNow() };
             }
             catch { return new eScaleInfomation() { IsEnable = true, CreatedDate = DateTime.Now.ServerNow() }; }
@@ -144,7 +144,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public eScaleInfomation getItemNotFinish(string VehicleNumber)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eScaleInfomation> lstTemp = db.eScaleInfomations.Where(x => x.IsEnable && !x.DateScale2.HasValue && x.IDAgency == clsGeneral.curAgency.KeyID && x.VehicleNumber.Equals(VehicleNumber));
             lstTemp = lstTemp.Where(x => x.CreatedDate.Date >= DateTime.Now.ServerNow().Date && x.CreatedDate.Date <= DateTime.Now.ServerNow().Date);
             return lstTemp.FirstOrDefault() ?? new eScaleInfomation();
@@ -154,7 +154,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 var item = _accessModel.eCustomers.Find(keyID);
                 item.Status = 3;
                 _accessModel.SaveChanges();
@@ -168,7 +168,7 @@ namespace ChuongTrinhCan.BLL.CATE
             DateTime time = DateTime.Now.ServerNow();
             try
             {
-                _accessModel = _accessModel ?? new aModel();
+                _accessModel = _accessModel ?? new zModel();
                 var item = _accessModel.eVehicleEmpties.FirstOrDefault(x => x.IDAgency == _acEntry.IDAgency && x.IsEnable && x.VehicleNumber.ToLower().Equals(_acEntry.VehicleNumber.ToLower()));
 
                 if (_acEntry.DateScale2.HasValue && item != null && EmptyWeight > 0)

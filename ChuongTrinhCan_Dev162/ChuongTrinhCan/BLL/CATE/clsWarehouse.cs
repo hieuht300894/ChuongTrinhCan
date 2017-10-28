@@ -33,10 +33,10 @@ namespace ChuongTrinhCan.BLL.CATE
         #endregion
 
         #region Functions
-        aModel db, _accessModel;
+        zModel db, _accessModel;
         public IList<eWarehouse> getAllWarehouse()
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eWarehouse> lstTemp = db.eWarehouses.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID);
 
             IList<eWarehouse> lstResult = lstTemp.ToList<eWarehouse>();
@@ -45,7 +45,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eWarehouse> searchWarehouse(bool IsEnable)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eWarehouse> lstTemp = db.eWarehouses.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID);
 
             IList<eWarehouse> lstResult = lstTemp.ToList<eWarehouse>();
@@ -54,7 +54,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         public IList<eWarehouse> searchWarehouse(bool IsEnable, int KeyID)
         {
-            db = new aModel();
+            db = new zModel();
             IEnumerable<eWarehouse> lstTemp = db.eWarehouses.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID || n.KeyID == KeyID);
 
             IList<eWarehouse> lstResult = lstTemp.ToList<eWarehouse>();
@@ -65,7 +65,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 return _accessModel.eWarehouses.Find(KeyID) ?? new eWarehouse() { IsEnable = true, IDAgency = clsGeneral.curAgency.KeyID };
             }
             catch { return new eWarehouse() { IsEnable = true, IDAgency = clsGeneral.curAgency.KeyID }; }
@@ -76,7 +76,7 @@ namespace ChuongTrinhCan.BLL.CATE
             bool bRe = false;
             try
             {
-                _accessModel = _accessModel ?? new aModel();
+                _accessModel = _accessModel ?? new zModel();
                 _accessModel.eWarehouses.AddOrUpdate<eWarehouse>(_acEntry);
                 _accessModel.SaveChanges();
                 bRe = true;
@@ -90,7 +90,7 @@ namespace ChuongTrinhCan.BLL.CATE
         {
             try
             {
-                _accessModel = new aModel();
+                _accessModel = new zModel();
                 _accessModel.eWarehouses.Find(keyID).IsEnable = false;
                 _accessModel.SaveChanges();
                 return true;
@@ -101,7 +101,7 @@ namespace ChuongTrinhCan.BLL.CATE
 
         //public eCustomer getCustomerByID(int KeyID)
         //{
-        //    db = new aModel();
+        //    db = new zModel();
         //    return db.eCustomers.Find(KeyID) ?? new eCustomer();
         //}
 
