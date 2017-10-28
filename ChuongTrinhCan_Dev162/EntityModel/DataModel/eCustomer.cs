@@ -12,10 +12,6 @@ namespace EntityModel.DataModel
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public eCustomer()
         {
-            eOrders = new HashSet<eOrder>();
-            eWarehouseIns = new HashSet<eWarehouseIn>();
-            eWarehouseMills = new HashSet<eWarehouseMill>();
-            eWarehouseOuts = new HashSet<eWarehouseOut>();
         }
 
         [Key]
@@ -55,18 +51,6 @@ namespace EntityModel.DataModel
         public string Note { get; set; }
 
         public int IDAgency { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<eOrder> eOrders { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<eWarehouseIn> eWarehouseIns { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<eWarehouseMill> eWarehouseMills { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<eWarehouseOut> eWarehouseOuts { get; set; }
 
     }
 }
