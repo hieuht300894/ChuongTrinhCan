@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CFB34729-3C55-4786-BDEB-AF8AC4D4DF82}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EntityModel</RootNamespace>
+    <AssemblyName>EntityModel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="aModel.cs" />
+    <Compile Include="DataModel\eAccount.cs" />
+    <Compile Include="DataModel\eAgency.cs" />
+    <Compile Include="DataModel\eBillOrderDry.cs" />
+    <Compile Include="DataModel\eCistern.cs" />
+    <Compile Include="DataModel\eConfigExtract.cs" />
+    <Compile Include="DataModel\eConfigInOutCistern.cs" />
+    <Compile Include="DataModel\eConfigWorkerDry.cs" />
+    <Compile Include="DataModel\eConfigWorkerExtract.cs" />
+    <Compile Include="DataModel\eConfigWorkerMill.cs" />
+    <Compile Include="DataModel\eConfigWorkerPortExtract.cs" />
+    <Compile Include="DataModel\eConfigWorkerSeparateColor.cs" />
+    <Compile Include="DataModel\eContraKiln.cs" />
+    <Compile Include="DataModel\eCustomer.cs" />
+    <Compile Include="DataModel\eCustomerScale.cs" />
+    <Compile Include="DataModel\eDebitCustomer.cs" />
+    <Compile Include="DataModel\eDetailConfigInOutCistern.cs" />
+    <Compile Include="DataModel\eDetailConfigWorkerDry.cs" />
+    <Compile Include="DataModel\eDetailConfigWorkerMill.cs" />
+    <Compile Include="DataModel\eDetailConfigWorkerPortExtract.cs" />
+    <Compile Include="DataModel\eDetailConfigWorkerSeparate.cs" />
+    <Compile Include="DataModel\eDetailTaskGroup.cs" />
+    <Compile Include="DataModel\eDry.cs" />
+    <Compile Include="DataModel\eExportExtract.cs" />
+    <Compile Include="DataModel\eExportMill.cs" />
+    <Compile Include="DataModel\eExtract.cs" />
+    <Compile Include="DataModel\eFactory.cs" />
+    <Compile Include="DataModel\eHistoryCistern.cs" />
+    <Compile Include="DataModel\eKilnDry.cs" />
+    <Compile Include="DataModel\eMill.cs" />
+    <Compile Include="DataModel\eOrder.cs" />
+    <Compile Include="DataModel\eOrderDetail.cs" />
+    <Compile Include="DataModel\eOrderDry.cs" />
+    <Compile Include="DataModel\eOrderRemain.cs" />
+    <Compile Include="DataModel\ePayDebitCustomer.cs" />
+    <Compile Include="DataModel\ePaymentVoucher.cs" />
+    <Compile Include="DataModel\ePaySalaryWorker.cs" />
+    <Compile Include="DataModel\ePersonnel.cs" />
+    <Compile Include="DataModel\ePort.cs" />
+    <Compile Include="DataModel\eProduct.cs" />
+    <Compile Include="DataModel\eProductScale.cs" />
+    <Compile Include="DataModel\eProvider.cs" />
+    <Compile Include="DataModel\eSalaryWorker.cs" />
+    <Compile Include="DataModel\eScaleInfomation.cs" />
+    <Compile Include="DataModel\eSeparateColor.cs" />
+    <Compile Include="DataModel\eSoDuDauKy.cs" />
+    <Compile Include="DataModel\eTask.cs" />
+    <Compile Include="DataModel\eTaskGroup.cs" />
+    <Compile Include="DataModel\eTaskPrice.cs" />
+    <Compile Include="DataModel\eTypeExtract.cs" />
+    <Compile Include="DataModel\eUnit.cs" />
+    <Compile Include="DataModel\eUnitCategory.cs" />
+    <Compile Include="DataModel\eVehicleEmpty.cs" />
+    <Compile Include="DataModel\eWarehouse.cs" />
+    <Compile Include="DataModel\eWarehouseIn.cs" />
+    <Compile Include="DataModel\eWarehouseMill.cs" />
+    <Compile Include="DataModel\eWarehouseOut.cs" />
+    <Compile Include="DataModel\eWarehouseScale.cs" />
+    <Compile Include="DataModel\sModel.cs" />
+    <Compile Include="DataModel\xAppConfig.cs" />
+    <Compile Include="DataModel\xDisplay.cs" />
+    <Compile Include="DataModel\xFeature.cs" />
+    <Compile Include="DataModel\xLayoutItemCaption.cs" />
+    <Compile Include="DataModel\xMsgDictionary.cs" />
+    <Compile Include="DataModel\xPermission.cs" />
+    <Compile Include="DataModel\xUserFeature.cs" />
+    <Compile Include="DataModel\xUserLog.cs" />
+    <Compile Include="DataModel\zModel.cs" />
+    <Compile Include="Module.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
