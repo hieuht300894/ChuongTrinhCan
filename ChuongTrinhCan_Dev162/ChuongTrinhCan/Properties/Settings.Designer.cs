@@ -12,7 +12,7 @@ namespace ChuongTrinhCan.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.3.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -242,12 +242,12 @@ namespace ChuongTrinhCan.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ComputerName {
+        public string sComputerName {
             get {
-                return ((string)(this["ComputerName"]));
+                return ((string)(this["sComputerName"]));
             }
             set {
-                this["ComputerName"] = value;
+                this["sComputerName"] = value;
             }
         }
         
@@ -487,6 +487,186 @@ namespace ChuongTrinhCan.Properties {
             }
             set {
                 this["Delete"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sComputerName_Client {
+            get {
+                return ((string)(this["sComputerName_Client"]));
+            }
+            set {
+                this["sComputerName_Client"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sServerName_Client {
+            get {
+                return ((string)(this["sServerName_Client"]));
+            }
+            set {
+                this["sServerName_Client"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool sWinAu_Client {
+            get {
+                return ((bool)(this["sWinAu_Client"]));
+            }
+            set {
+                this["sWinAu_Client"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sDBName_Client {
+            get {
+                return ((string)(this["sDBName_Client"]));
+            }
+            set {
+                this["sDBName_Client"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sUserName_Client {
+            get {
+                return ((string)(this["sUserName_Client"]));
+            }
+            set {
+                this["sUserName_Client"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sPassword_Client {
+            get {
+                return ((string)(this["sPassword_Client"]));
+            }
+            set {
+                this["sPassword_Client"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sComputerName_Server {
+            get {
+                return ((string)(this["sComputerName_Server"]));
+            }
+            set {
+                this["sComputerName_Server"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sServerName_Server {
+            get {
+                return ((string)(this["sServerName_Server"]));
+            }
+            set {
+                this["sServerName_Server"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool sWinAu_Server {
+            get {
+                return ((bool)(this["sWinAu_Server"]));
+            }
+            set {
+                this["sWinAu_Server"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sDBName_Server {
+            get {
+                return ((string)(this["sDBName_Server"]));
+            }
+            set {
+                this["sDBName_Server"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sUserName_Server {
+            get {
+                return ((string)(this["sUserName_Server"]));
+            }
+            set {
+                this["sUserName_Server"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sPassword_Server {
+            get {
+                return ((string)(this["sPassword_Server"]));
+            }
+            set {
+                this["sPassword_Server"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ftp {
+            get {
+                return ((string)(this["ftp"]));
+            }
+            set {
+                this["ftp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ftp_user {
+            get {
+                return ((string)(this["ftp_user"]));
+            }
+            set {
+                this["ftp_user"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ftp_pw {
+            get {
+                return ((string)(this["ftp_pw"]));
+            }
+            set {
+                this["ftp_pw"] = value;
             }
         }
     }

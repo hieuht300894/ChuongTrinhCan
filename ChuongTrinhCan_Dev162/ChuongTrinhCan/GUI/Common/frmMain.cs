@@ -6,7 +6,6 @@ using ChuongTrinhCan.Module;
 using ChuongTrinhCan.Report;
 using DevExpress.LookAndFeel;
 using DevExpress.XtraEditors;
-using DevExpress.XtraEditors.Popup;
 using DevExpress.XtraGrid;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraLayout;
@@ -276,13 +275,13 @@ namespace ChuongTrinhCan.GUI.Common
                 {
                     clsGeneral.CloseWaitForm();
                     if (XtraMessageBox.Show("Cấu hình kêt nối SQL?", "Thông báo", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
-                        success = CauHinhSQL() == System.Windows.Forms.DialogResult.OK;
+                        success = CauHinhSQL() == DialogResult.OK;
                     else
                         success = false;
                     clsGeneral.CallWaitForm(this);
                 }
                 else
-                    checkConnection(Properties.Settings.Default.ComputerName);
+                    checkConnection(Properties.Settings.Default.sComputerName);
             }
 
             if (success)
@@ -311,11 +310,11 @@ namespace ChuongTrinhCan.GUI.Common
             this.bsiComName.Caption = "Computer Name: " + computerName;
             string _sName, _sDatabase, _sUser, _sPass;
             bool _wAu;
-            _wAu = Properties.Settings.Default.sWinAu;
-            _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName);
-            _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName);
-            _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName);
-            _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword);
+            _wAu = Properties.Settings.Default.sWinAu_Client;
+            _sName = clsGeneral.Decrypt(Properties.Settings.Default.sServerName_Client);
+            _sDatabase = clsGeneral.Decrypt(Properties.Settings.Default.sDBName_Client);
+            _sUser = clsGeneral.Decrypt(Properties.Settings.Default.sUserName_Client);
+            _sPass = clsGeneral.Decrypt(Properties.Settings.Default.sPassword_Client);
 
             string _conString = "";
             if (!_wAu)
