@@ -24,6 +24,8 @@ namespace EntityModel.DataModel
 
         public decimal Price { get; set; }
 
+        public decimal PriceCustomer { get; set; }
+
         public bool IsEnable { get; set; }
 
         public int Status { get; set; }

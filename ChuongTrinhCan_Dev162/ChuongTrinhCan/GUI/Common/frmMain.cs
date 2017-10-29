@@ -1266,6 +1266,12 @@ namespace ChuongTrinhCan.GUI.Common
             exportExcel();
             src_Filter_SoXe.Select();
         }
+
+        private void bbiSync_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            frmSyncData frm = new frmSyncData();
+            frm.ShowDialog();
+        }
         #endregion
 
         #region LookUpEdit

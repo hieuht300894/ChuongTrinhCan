@@ -673,3 +673,5 @@ E:\Projects\ChuongTrinhCan\trunk\ChuongTrinhCan_Dev162\ChuongTrinhCan\obj\Debug\
 E:\Projects\ChuongTrinhCan\trunk\ChuongTrinhCan_Dev162\ChuongTrinhCan\obj\Debug\ChuongTrinhCan.csproj.CoreCompileInputs.cache
 E:\Projects\ChuongTrinhCan\trunk\ChuongTrinhCan_Dev162\ChuongTrinhCan\obj\Debug\ChuongTrinhCan.exe
 E:\Projects\ChuongTrinhCan\trunk\ChuongTrinhCan_Dev162\ChuongTrinhCan\obj\Debug\ChuongTrinhCan.pdb
+E:\Projects\ChuongTrinhCan\trunk\ChuongTrinhCan_Dev162\ChuongTrinhCan\bin\Debug\EntityModel.dll
+E:\Projects\ChuongTrinhCan\trunk\ChuongTrinhCan_Dev162\ChuongTrinhCan\obj\Debug\ChuongTrinhCan.GUI.CATE.frmSyncData.resources

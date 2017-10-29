@@ -85,10 +85,6 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="EntityModel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\PhuocLoi\EntityModel\bin\Debug\EntityModel.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -108,7 +104,6 @@
     <Compile Include="BLL\CATE\clsWarehouse.cs" />
     <Compile Include="BLL\CATE\clsVehicleEmpty.cs" />
     <Compile Include="BLL\Common\clsAgency.cs" />
-    <Compile Include="BLL\Common\clsFuction.cs" />
     <Compile Include="GUI\CATE\frmCustomer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +127,12 @@
     </Compile>
     <Compile Include="GUI\CATE\frmProduct_List.designer.cs">
       <DependentUpon>frmProduct_List.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\CATE\frmSyncData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CATE\frmSyncData.Designer.cs">
+      <DependentUpon>frmSyncData.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\CATE\frmVehicleEmpty.cs">
       <SubType>Form</SubType>
@@ -220,7 +221,6 @@
     <Compile Include="Module\clsEntity.cs" />
     <Compile Include="Module\clsGeneral.cs" />
     <Compile Include="Module\FormatControl.cs" />
-    <Compile Include="Module\sModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Report\rptPhieuCan.cs">
@@ -240,6 +240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\CATE\frmProduct_List.resx">
       <DependentUpon>frmProduct_List.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\CATE\frmSyncData.resx">
+      <DependentUpon>frmSyncData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\CATE\frmVehicleEmpty.resx">
       <DependentUpon>frmVehicleEmpty.cs</DependentUpon>
@@ -323,6 +326,8 @@
     <None Include="Resources\information.png" />
     <None Include="Resources\confirm.png" />
     <None Include="Resources\checkbox2_32x32.png" />
+    <None Include="Resources\convert_32x32.png" />
+    <None Include="Resources\convert_16x16.png" />
     <Content Include="Scale.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -341,6 +346,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EntityModel\EntityModel.csproj">
+      <Project>{cfb34729-3c55-4786-bdeb-af8ac4d4df82}</Project>
+      <Name>EntityModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

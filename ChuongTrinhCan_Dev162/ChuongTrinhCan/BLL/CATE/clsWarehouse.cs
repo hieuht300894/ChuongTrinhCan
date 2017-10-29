@@ -85,7 +85,6 @@ namespace ChuongTrinhCan.BLL.CATE
             return bRe;
         }
 
-
         public bool deleteEntry(int keyID)
         {
             try
@@ -97,17 +96,6 @@ namespace ChuongTrinhCan.BLL.CATE
             }
             catch { return false; }
         }
-
-
-        //public eCustomer getCustomerByID(int KeyID)
-        //{
-        //    db = new zModel();
-        //    return db.eCustomers.Find(KeyID) ?? new eCustomer();
-        //}
-
-
-
-
         #endregion
     }
 }

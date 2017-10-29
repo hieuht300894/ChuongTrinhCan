@@ -155,6 +155,7 @@
             this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.tmCheck = new System.Windows.Forms.Timer(this.components);
+            this.bbiSync = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lok_Filter_SP.Properties)).BeginInit();
@@ -316,9 +317,10 @@
             this.bsiComName,
             this.bbiPrint,
             this.bbiDisplay,
-            this.bsiDeviceStatus});
+            this.bsiDeviceStatus,
+            this.bbiSync});
             this.barManager2.MainMenu = this.bar2;
-            this.barManager2.MaxItemId = 18;
+            this.barManager2.MaxItemId = 19;
             this.barManager2.StatusBar = this.bar3;
             // 
             // bar2
@@ -343,7 +345,8 @@
             new DevExpress.XtraBars.LinkPersistInfo(this.bbiKhachHang),
             new DevExpress.XtraBars.LinkPersistInfo(this.bbiSanPham),
             new DevExpress.XtraBars.LinkPersistInfo(this.bbiKho),
-            new DevExpress.XtraBars.LinkPersistInfo(this.bbiXacXe)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.bbiXacXe),
+            new DevExpress.XtraBars.LinkPersistInfo(this.bbiSync)});
             this.barSubItem2.Name = "barSubItem2";
             // 
             // bbiKhachHang
@@ -464,6 +467,7 @@
             this.barDockControl1.CausesValidation = false;
             this.barDockControl1.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControl1.Location = new System.Drawing.Point(0, 0);
+            this.barDockControl1.Manager = this.barManager2;
             this.barDockControl1.Size = new System.Drawing.Size(984, 22);
             // 
             // barDockControl2
@@ -471,6 +475,7 @@
             this.barDockControl2.CausesValidation = false;
             this.barDockControl2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.barDockControl2.Location = new System.Drawing.Point(0, 704);
+            this.barDockControl2.Manager = this.barManager2;
             this.barDockControl2.Size = new System.Drawing.Size(984, 25);
             // 
             // barDockControl3
@@ -478,6 +483,7 @@
             this.barDockControl3.CausesValidation = false;
             this.barDockControl3.Dock = System.Windows.Forms.DockStyle.Left;
             this.barDockControl3.Location = new System.Drawing.Point(0, 22);
+            this.barDockControl3.Manager = this.barManager2;
             this.barDockControl3.Size = new System.Drawing.Size(0, 682);
             // 
             // barDockControl4
@@ -485,6 +491,7 @@
             this.barDockControl4.CausesValidation = false;
             this.barDockControl4.Dock = System.Windows.Forms.DockStyle.Right;
             this.barDockControl4.Location = new System.Drawing.Point(984, 22);
+            this.barDockControl4.Manager = this.barManager2;
             this.barDockControl4.Size = new System.Drawing.Size(0, 682);
             // 
             // bbiPrint
@@ -1740,6 +1747,13 @@
             this.tmCheck.Interval = 1000;
             this.tmCheck.Tick += new System.EventHandler(this.tmCheck_Tick);
             // 
+            // bbiSync
+            // 
+            this.bbiSync.Caption = "Đồng bộ";
+            this.bbiSync.Id = 18;
+            this.bbiSync.Name = "bbiSync";
+            this.bbiSync.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiSync_ItemClick);
+            // 
             // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1834,6 +1848,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1963,5 +1978,6 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem13;
         private System.Windows.Forms.Timer tmCheck;
         private DevExpress.XtraBars.BarStaticItem bsiDeviceStatus;
+        private DevExpress.XtraBars.BarButtonItem bbiSync;
     }
 }
