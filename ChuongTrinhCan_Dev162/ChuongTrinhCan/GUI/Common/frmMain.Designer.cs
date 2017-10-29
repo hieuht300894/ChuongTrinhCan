@@ -40,6 +40,7 @@
             this.bbiSanPham = new DevExpress.XtraBars.BarButtonItem();
             this.bbiKho = new DevExpress.XtraBars.BarButtonItem();
             this.bbiXacXe = new DevExpress.XtraBars.BarButtonItem();
+            this.bbiSync = new DevExpress.XtraBars.BarButtonItem();
             this.bbiMenu = new DevExpress.XtraBars.BarButtonItem();
             this.barSubItem1 = new DevExpress.XtraBars.BarSubItem();
             this.bbiDevice = new DevExpress.XtraBars.BarButtonItem();
@@ -155,7 +156,6 @@
             this.layoutControlItem9 = new DevExpress.XtraLayout.LayoutControlItem();
             this.popGridMenu = new DevExpress.XtraBars.PopupMenu(this.components);
             this.tmCheck = new System.Windows.Forms.Timer(this.components);
-            this.bbiSync = new DevExpress.XtraBars.BarButtonItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.lok_Filter_SP.Properties)).BeginInit();
@@ -376,6 +376,13 @@
             this.bbiXacXe.Id = 9;
             this.bbiXacXe.Name = "bbiXacXe";
             this.bbiXacXe.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiXacXe_ItemClick);
+            // 
+            // bbiSync
+            // 
+            this.bbiSync.Caption = "Cập nhật dữ liệu";
+            this.bbiSync.Id = 18;
+            this.bbiSync.Name = "bbiSync";
+            this.bbiSync.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiSync_ItemClick);
             // 
             // bbiMenu
             // 
@@ -1746,13 +1753,6 @@
             // 
             this.tmCheck.Interval = 1000;
             this.tmCheck.Tick += new System.EventHandler(this.tmCheck_Tick);
-            // 
-            // bbiSync
-            // 
-            this.bbiSync.Caption = "Đồng bộ";
-            this.bbiSync.Id = 18;
-            this.bbiSync.Name = "bbiSync";
-            this.bbiSync.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.bbiSync_ItemClick);
             // 
             // frmMain
             // 

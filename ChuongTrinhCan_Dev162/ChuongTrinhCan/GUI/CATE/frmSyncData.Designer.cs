@@ -321,7 +321,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "frmSyncData";
-            this.Text = "Đồng bộ dữ liệu";
+            this.Text = "Cập nhật dữ liệu";
             this.Load += new System.EventHandler(this.frmSyncData_Load);
             this.Controls.SetChildIndex(this.layoutControl1, 0);
             ((System.ComponentModel.ISupportInitialize)(this.popGridMenu)).EndInit();

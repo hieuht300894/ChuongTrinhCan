@@ -74,6 +74,33 @@ namespace ChuongTrinhCan.GUI.CATE
             db.Database.ExecuteSqlCommand(string.Format(qFormat, TableName, qFields, qParams), parameters.ToArray());
         }
 
+        public void SaveUpdate(DbContext db, string TableName, Dictionary<string, object> dParamKeys, Dictionary<string, object> dParamValues)
+        {
+            string qFormat = $"UPDATE {{0}} SET {{1}} WHERE {{2}}";
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            string qConditions = "";
+            string qAssigns = "";
+
+            int i = 0;
+            int length = dParamKeys.Count - 1;
+            dParamKeys.ToList().ForEach(x =>
+            {
+                qConditions += $"{x.Key}=@{x.Key} {(i++ < length ? " AND " : "")}";
+                parameters.Add(new SqlParameter() { ParameterName = "@" + x.Key, Value = x.Value ?? DBNull.Value });
+            });
+
+            i = 0;
+            length = dParamValues.Count - 1;
+            dParamValues.ToList().ForEach(x =>
+            {
+                qAssigns += $"{x.Key}=@{x.Key}{(i++ < length ? ", " : "")}";
+                parameters.Add(new SqlParameter() { ParameterName = "@" + x.Key, Value = x.Value ?? DBNull.Value });
+            });
+
+            if (!string.IsNullOrEmpty(qAssigns))
+                db.Database.ExecuteSqlCommand(string.Format(qFormat, TableName, qAssigns, qConditions), parameters.ToArray());
+        }
+
         public Dictionary<string, object> ObjectToDictionary(object source)
         {
             Dictionary<string, object> dic = new Dictionary<string, object>();
@@ -126,57 +153,160 @@ namespace ChuongTrinhCan.GUI.CATE
                 {
                     if (cMaxID == sMaxID)
                     {
-                        // Không làm gì
+                        #region  Cập nhật dữ liệu
+                        List<eScaleInfomation> lstDataUpdate_Client = cDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation", new SqlParameter[] { }).ToList();
+                        List<eScaleInfomation> lstDataUpdate_Server = sDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eScaleInfomation", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else if (cMaxID > sMaxID)
                     {
-                        // Chuyển dữ liệu từ Client sang Server
-                        List<eScaleInfomation> lstCustomer_Client = cDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Client sang Server
+                        List<eScaleInfomation> lstData_Client = cDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation ON ");
-                        foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eScaleInfomation", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Client) { SaveInsert(sDB, "eScaleInfomation", ObjectToDictionary(item)); }
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eScaleInfomation> lstDataUpdate_Client = cDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eScaleInfomation> lstDataUpdate_Server = sDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eScaleInfomation", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else
                     {
-                        // Chuyển dữ liệu từ Server sang Client
-                        List<eScaleInfomation> lstCustomer_Server = sDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Server sang Client
+                        List<eScaleInfomation> lstData_Server = sDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation ON ");
-                        foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eScaleInfomation", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Server) { SaveInsert(cDB, "eScaleInfomation", ObjectToDictionary(item)); }
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eScaleInfomation> lstDataUpdate_Client = cDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eScaleInfomation> lstDataUpdate_Server = sDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eScaleInfomation", dKeys, dValues);
+                        }
+                        #endregion
                     }
                 }
                 else if (cMaxID.HasValue && !sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Client sang Server
-                    List<eScaleInfomation> lstCustomer_Client = cDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region Chuyển dữ liệu từ Client sang Server
+                    List<eScaleInfomation> lstData_Client = cDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation ON ");
-                    foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eScaleInfomation", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Client) { SaveInsert(sDB, "eScaleInfomation", ObjectToDictionary(item)); }
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation OFF ");
+                    #endregion
                 }
                 else if (!cMaxID.HasValue && sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Server sang Client
-                    List<eScaleInfomation> lstCustomer_Server = sDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region Chuyển dữ liệu từ Server sang Client
+                    List<eScaleInfomation> lstData_Server = sDB.Database.SqlQuery<eScaleInfomation>($"select * from eScaleInfomation where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation ON ");
-                    foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eScaleInfomation", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Server) { SaveInsert(cDB, "eScaleInfomation", ObjectToDictionary(item)); }
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eScaleInfomation OFF ");
+                    #endregion
                 }
                 else
                 {
-                    // Không làm gì
                 }
 
                 cDB.Database.CurrentTransaction.Commit();
                 sDB.Database.CurrentTransaction.Commit();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showMessage("Đồng bộ dữ liệu cân hoàn tất");
+                clsGeneral.showMessage("Cập nhật dữ liệu cân hoàn tất");
             }
             catch (Exception ex)
             {
                 cDB.Database.CurrentTransaction.Rollback();
                 sDB.Database.CurrentTransaction.Rollback();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showErrorException(ex, "Đồng bộ dữ liệu cân thất bại");
+                clsGeneral.showErrorException(ex, "Cập nhật dữ liệu cân thất bại");
             }
         }
 
@@ -201,57 +331,161 @@ namespace ChuongTrinhCan.GUI.CATE
                 {
                     if (cMaxID == sMaxID)
                     {
-                        // Không làm gì
+                        #region  Cập nhật dữ liệu
+                        List<eProduct> lstDataUpdate_Client = cDB.Database.SqlQuery<eProduct>($"select * from eProduct", new SqlParameter[] { }).ToList();
+                        List<eProductScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eProductScale>($"select * from eProductScale", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eProductScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else if (cMaxID > sMaxID)
                     {
-                        // Chuyển dữ liệu từ Client sang Server
-                        List<eProduct> lstCustomer_Client = cDB.Database.SqlQuery<eProduct>($"select * from eProduct where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Client sang Server
+                        List<eProduct> lstData_Client = cDB.Database.SqlQuery<eProduct>($"select * from eProduct where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProductScale ON ");
-                        foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eProductScale", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Client) { SaveInsert(sDB, "eProductScale", ObjectToDictionary(item)); }
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProductScale OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eProduct> lstDataUpdate_Client = cDB.Database.SqlQuery<eProduct>($"select * from eProduct where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eProductScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eProductScale>($"select * from eProductScale where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eProductScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else
                     {
-                        // Chuyển dữ liệu từ Server sang Client
-                        List<eProductScale> lstCustomer_Server = sDB.Database.SqlQuery<eProductScale>($"select * from eProductScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Server sang Client
+                        List<eProductScale> lstData_Server = sDB.Database.SqlQuery<eProductScale>($"select * from eProductScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProduct ON ");
-                        foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eProduct", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Server) { SaveInsert(cDB, "eProduct", ObjectToDictionary(item)); }
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProduct OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eProduct> lstDataUpdate_Client = cDB.Database.SqlQuery<eProduct>($"select * from eProduct where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eProduct> lstDataUpdate_Server = sDB.Database.SqlQuery<eProduct>($"select * from eProductScale where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eProductScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                 }
                 else if (cMaxID.HasValue && !sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Client sang Server
-                    List<eProduct> lstCustomer_Client = cDB.Database.SqlQuery<eProduct>($"select * from eProduct where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region Chuyển dữ liệu từ Client sang Server
+                    List<eProduct> lstData_Client = cDB.Database.SqlQuery<eProduct>($"select * from eProduct where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProductScale ON ");
-                    foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eProductScale", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Client) { SaveInsert(sDB, "eProductScale", ObjectToDictionary(item)); }
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProductScale OFF ");
+                    #endregion
                 }
                 else if (!cMaxID.HasValue && sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Server sang Client
-                    List<eProductScale> lstCustomer_Server = sDB.Database.SqlQuery<eProductScale>($"select * from eProductScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region Chuyển dữ liệu từ Server sang Client
+                    List<eProductScale> lstData_Server = sDB.Database.SqlQuery<eProductScale>($"select * from eProductScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProduct ON ");
-                    foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eProduct", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Server) { SaveInsert(cDB, "eProduct", ObjectToDictionary(item)); }
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eProduct OFF ");
+                    #endregion
                 }
                 else
                 {
-                    // Không làm gì
+                    //  Cập nhật dữ liệu
                 }
 
                 cDB.Database.CurrentTransaction.Commit();
                 sDB.Database.CurrentTransaction.Commit();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showMessage("Đồng bộ sản phẩm hoàn tất");
+                clsGeneral.showMessage("Cập nhật sản phẩm hoàn tất");
             }
             catch (Exception ex)
             {
                 cDB.Database.CurrentTransaction.Rollback();
                 sDB.Database.CurrentTransaction.Rollback();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showErrorException(ex, "Đồng bộ sản phẩm thất bại");
+                clsGeneral.showErrorException(ex, "Cập nhật sản phẩm thất bại");
             }
         }
 
@@ -276,57 +510,161 @@ namespace ChuongTrinhCan.GUI.CATE
                 {
                     if (cMaxID == sMaxID)
                     {
-                        // Không làm gì
+                        #region  Cập nhật dữ liệu
+                        List<eWarehouse> lstDataUpdate_Client = cDB.Database.SqlQuery<eWarehouse>($"select * from eWarehouse", new SqlParameter[] { }).ToList();
+                        List<eWarehouseScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eWarehouseScale>($"select * from eWarehouseScale", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eWarehouseScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else if (cMaxID > sMaxID)
                     {
-                        // Chuyển dữ liệu từ Client sang Server
-                        List<eWarehouse> lstCustomer_Client = cDB.Database.SqlQuery<eWarehouse>($"select * from eWarehouse where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Client sang Server
+                        List<eWarehouse> lstData_Client = cDB.Database.SqlQuery<eWarehouse>($"select * from eWarehouse where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouseScale ON ");
-                        foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eWarehouseScale", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Client) { SaveInsert(sDB, "eWarehouseScale", ObjectToDictionary(item)); }
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouseScale OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eWarehouse> lstDataUpdate_Client = cDB.Database.SqlQuery<eWarehouse>($"select * from eWarehouse where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eWarehouseScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eWarehouseScale>($"select * from eWarehouseScale where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eWarehouseScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else
                     {
-                        // Chuyển dữ liệu từ Server sang Client
-                        List<eWarehouseScale> lstCustomer_Server = sDB.Database.SqlQuery<eWarehouseScale>($"select * from eWarehouseScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Server sang Client
+                        List<eWarehouseScale> lstData_Server = sDB.Database.SqlQuery<eWarehouseScale>($"select * from eWarehouseScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouse ON ");
-                        foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eWarehouse", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Server) { SaveInsert(cDB, "eWarehouse", ObjectToDictionary(item)); }
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouse OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eWarehouse> lstDataUpdate_Client = cDB.Database.SqlQuery<eWarehouse>($"select * from eWarehouse where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eWarehouseScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eWarehouseScale>($"select * from eWarehouseScale where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eWarehouseScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                 }
                 else if (cMaxID.HasValue && !sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Client sang Server
-                    List<eWarehouse> lstCustomer_Client = cDB.Database.SqlQuery<eWarehouse>($"select * from eWarehouse where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region Chuyển dữ liệu từ Client sang Server
+                    List<eWarehouse> lstData_Client = cDB.Database.SqlQuery<eWarehouse>($"select * from eWarehouse where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouseScale ON ");
-                    foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eWarehouseScale", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Client) { SaveInsert(sDB, "eWarehouseScale", ObjectToDictionary(item)); }
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouseScale OFF ");
+                    #endregion
                 }
                 else if (!cMaxID.HasValue && sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Server sang Client
-                    List<eWarehouseScale> lstCustomer_Server = sDB.Database.SqlQuery<eWarehouseScale>($"select * from eWarehouseScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region Chuyển dữ liệu từ Server sang Client
+                    List<eWarehouseScale> lstData_Server = sDB.Database.SqlQuery<eWarehouseScale>($"select * from eWarehouseScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouse ON ");
-                    foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eWarehouse", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Server) { SaveInsert(cDB, "eWarehouse", ObjectToDictionary(item)); }
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eWarehouse OFF ");
+                    #endregion
                 }
                 else
                 {
-                    // Không làm gì
+                    //  Cập nhật dữ liệu
                 }
 
                 cDB.Database.CurrentTransaction.Commit();
                 sDB.Database.CurrentTransaction.Commit();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showMessage("Đồng bộ kho hoàn tất");
+                clsGeneral.showMessage("Cập nhật kho hoàn tất");
             }
             catch (Exception ex)
             {
                 cDB.Database.CurrentTransaction.Rollback();
                 sDB.Database.CurrentTransaction.Rollback();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showErrorException(ex, "Đồng bộ kho thất bại");
+                clsGeneral.showErrorException(ex, "Cập nhật kho thất bại");
             }
         }
 
@@ -351,60 +689,162 @@ namespace ChuongTrinhCan.GUI.CATE
                 {
                     if (cMaxID == sMaxID)
                     {
-                        // Không làm gì
+                        #region  Cập nhật dữ liệu
+                        List<eCustomer> lstDataUpdate_Client = cDB.Database.SqlQuery<eCustomer>($"select * from eCustomer", new SqlParameter[] { }).ToList();
+                        List<eCustomerScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eCustomerScale>($"select * from eCustomerScale", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eCustomerScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else if (cMaxID > sMaxID)
                     {
-                        // Chuyển dữ liệu từ Client sang Server
-                        List<eCustomer> lstCustomer_Client = cDB.Database.SqlQuery<eCustomer>($"select * from eCustomer where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Client sang Server
+                        List<eCustomer> lstData_Client = cDB.Database.SqlQuery<eCustomer>($"select * from eCustomer where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomerScale ON ");
-                        foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eCustomerScale", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Client) { SaveInsert(sDB, "eCustomerScale", ObjectToDictionary(item)); }
                         sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomerScale OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eCustomer> lstDataUpdate_Client = cDB.Database.SqlQuery<eCustomer>($"select * from eCustomer where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eCustomerScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eCustomerScale>($"select * from eCustomerScale where KeyID<={(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eCustomerScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                     else
                     {
-                        // Chuyển dữ liệu từ Server sang Client
-                        List<eCustomerScale> lstCustomer_Server = sDB.Database.SqlQuery<eCustomerScale>($"select * from eCustomerScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        #region Chuyển dữ liệu từ Server sang Client
+                        List<eCustomerScale> lstData_Server = sDB.Database.SqlQuery<eCustomerScale>($"select * from eCustomerScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomer ON ");
-                        foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eCustomer", ObjectToDictionary(item)); }
+                        foreach (var item in lstData_Server) { SaveInsert(cDB, "eCustomer", ObjectToDictionary(item)); }
                         cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomer OFF ");
+                        #endregion
+
+                        #region  Cập nhật dữ liệu
+                        List<eCustomer> lstDataUpdate_Client = cDB.Database.SqlQuery<eCustomer>($"select * from eCustomer where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        List<eCustomerScale> lstDataUpdate_Server = sDB.Database.SqlQuery<eCustomerScale>($"select * from eCustomerScale where KeyID<={(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                        foreach (var item_Client in lstDataUpdate_Client)
+                        {
+                            var item_Server = lstDataUpdate_Server.Find(x => x.KeyID == item_Client.KeyID);
+
+                            Dictionary<string, object> dKeys = new Dictionary<string, object>();
+                            dKeys.Add("KeyID", item_Client.KeyID);
+
+                            Dictionary<string, object> dValues = new Dictionary<string, object>();
+                            Dictionary<string, object> dValues_New = ObjectToDictionary(item_Client);
+                            Dictionary<string, object> dValues_Old = ObjectToDictionary(item_Server);
+
+                            foreach (var item_New in dValues_New)
+                            {
+                                object NewValue = dValues_New[item_New.Key];
+                                object OldValue = dValues_Old[item_New.Key];
+
+                                if (OldValue != null && NewValue != null && !OldValue.Equals(NewValue)) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue != null && NewValue == null) { dValues.Add(item_New.Key, NewValue); }
+                                else if (OldValue == null && NewValue != null) { dValues.Add(item_New.Key, NewValue); }
+                                else { }
+                            }
+
+                            foreach (var key in dKeys)
+                            {
+                                dValues.Remove(key.Key);
+                            }
+
+                            SaveUpdate(sDB, "eCustomerScale", dKeys, dValues);
+                        }
+                        #endregion
                     }
                 }
                 else if (cMaxID.HasValue && !sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Client sang Server
-                    List<eCustomer> lstCustomer_Client = cDB.Database.SqlQuery<eCustomer>($"select * from eCustomer where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region  Chuyển dữ liệu từ Client sang Server
+                    List<eCustomer> lstData_Client = cDB.Database.SqlQuery<eCustomer>($"select * from eCustomer where KeyID>{(sMaxID.HasValue ? sMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomerScale ON ");
-                    foreach (var item in lstCustomer_Client) { SaveInsert(sDB, "eCustomerScale", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Client) { SaveInsert(sDB, "eCustomerScale", ObjectToDictionary(item)); }
                     sDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomerScale OFF ");
+                    #endregion
                 }
                 else if (!cMaxID.HasValue && sMaxID.HasValue)
                 {
-                    // Chuyển dữ liệu từ Server sang Client
-                    List<eCustomerScale> lstCustomer_Server = sDB.Database.SqlQuery<eCustomerScale>($"select * from eCustomerScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
+                    #region Chuyển dữ liệu từ Server sang Client
+                    List<eCustomerScale> lstData_Server = sDB.Database.SqlQuery<eCustomerScale>($"select * from eCustomerScale where KeyID>{(cMaxID.HasValue ? cMaxID.Value : 0)}", new SqlParameter[] { }).ToList();
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomer ON ");
-                    foreach (var item in lstCustomer_Server) { SaveInsert(cDB, "eCustomer", ObjectToDictionary(item)); }
+                    foreach (var item in lstData_Server) { SaveInsert(cDB, "eCustomer", ObjectToDictionary(item)); }
                     cDB.Database.ExecuteSqlCommand("SET IDENTITY_INSERT eCustomer OFF ");
+                    #endregion
                 }
                 else
                 {
-                    // Không làm gì
+                    //  Cập nhật dữ liệu
                 }
 
                 cDB.Database.CurrentTransaction.Commit();
                 sDB.Database.CurrentTransaction.Commit();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showMessage("Đồng bộ khách hàng hoàn tất");
+                clsGeneral.showMessage("Cập nhật khách hàng hoàn tất");
             }
             catch (Exception ex)
             {
                 cDB.Database.CurrentTransaction.Rollback();
                 sDB.Database.CurrentTransaction.Rollback();
                 clsGeneral.CloseWaitForm();
-                clsGeneral.showErrorException(ex, "Đồng bộ khách hàng thát bại");
+                clsGeneral.showErrorException(ex, "Cập nhật khách hàng thất bại");
             }
         }
-
-
     }
 }

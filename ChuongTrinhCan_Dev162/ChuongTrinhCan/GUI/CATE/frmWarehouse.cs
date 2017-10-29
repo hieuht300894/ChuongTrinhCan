@@ -92,6 +92,7 @@ namespace ChuongTrinhCan.GUI.CATE
             bool chk = false;
             _aEntry.Code = txtCode.Text.Trim();
             _aEntry.Name = txtName.Text.Trim();
+            _aEntry.Note = mmeNote.Text.Trim();
             if (_aEntry.KeyID == 0)
                 _aEntry.CreatedDate = DateTime.Now.ServerNow();
             else

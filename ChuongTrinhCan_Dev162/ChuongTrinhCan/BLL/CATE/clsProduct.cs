@@ -95,7 +95,7 @@ namespace ChuongTrinhCan.BLL.CATE
                 foreach (int id in ids)
                 {
                     eProduct item = _accessModel.eProducts.Find(id);
-                    item.Status = 3;
+                    item.IsEnable = false;
                 }
                 _accessModel.SaveChanges();
                 bRe = true;
