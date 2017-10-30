@@ -38,7 +38,7 @@ namespace ChuongTrinhCan.BLL.CATE
         public IList<eProduct> getAllProduct()
         {
             db = new zModel();
-            IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3);
+            IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID);
 
             IEnumerable<eProduct> lstOrder = lstTemp.OrderByDescending(x => x.Status).ThenBy(x => x.Code);
             IList<eProduct> lstResult = lstOrder.ToList<eProduct>();
@@ -48,7 +48,7 @@ namespace ChuongTrinhCan.BLL.CATE
         public IList<eProduct> searchProduct(bool IsEnable)
         {
             db = new zModel();
-            IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3);
+            IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID);
 
             IEnumerable<eProduct> lstOrder = lstTemp.OrderByDescending(x => x.Status).ThenBy(x => x.Code);
             IList<eProduct> lstResult = lstOrder.ToList<eProduct>();
@@ -58,7 +58,7 @@ namespace ChuongTrinhCan.BLL.CATE
         public IList<eProduct> searchProduct(bool IsEnable, int KeyID)
         {
             db = new zModel();
-            IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3 || n.KeyID == KeyID);
+            IEnumerable<eProduct> lstTemp = db.eProducts.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID  || n.KeyID == KeyID);
 
             IEnumerable<eProduct> lstOrder = lstTemp.OrderByDescending(x => x.Status).ThenBy(x => x.Code);
             IList<eProduct> lstResult = lstOrder.ToList<eProduct>();

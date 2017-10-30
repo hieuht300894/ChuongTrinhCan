@@ -58,7 +58,7 @@ namespace ChuongTrinhCan.BLL.CATE
         public IList<eCustomer> searchCustomer(bool IsEnable)
         {
             db = new zModel();
-            IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3);
+            IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID );
 
             IList<eCustomer> lstResult = lstTemp.ToList<eCustomer>();
             return lstResult;
@@ -67,7 +67,7 @@ namespace ChuongTrinhCan.BLL.CATE
         public IList<eCustomer> searchCustomer(bool IsEnable, int KeyID)
         {
             db = new zModel();
-            IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID && n.Status != 3 || n.KeyID == KeyID);
+            IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IsEnable == IsEnable && n.IDAgency == clsGeneral.curAgency.KeyID || n.KeyID == KeyID);
 
             IList<eCustomer> lstResult = lstTemp.ToList<eCustomer>();
             return lstResult;
@@ -76,7 +76,7 @@ namespace ChuongTrinhCan.BLL.CATE
         public IList<eCustomer> searchCustomer(eCustomer eFilter)
         {
             db = new zModel();
-            IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID && n.IsEnable == eFilter.IsEnable && n.Status != 3);
+            IEnumerable<eCustomer> lstTemp = db.eCustomers.Where(n => n.IDAgency == clsGeneral.curAgency.KeyID && n.IsEnable == eFilter.IsEnable );
 
             if (!string.IsNullOrEmpty(eFilter.Code))
                 lstTemp = lstTemp.Where(x => x.Code.ToLower().Contains(eFilter.Code.ToLower()));

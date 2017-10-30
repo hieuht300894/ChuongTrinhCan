@@ -932,7 +932,7 @@ namespace ChuongTrinhCan.GUI.Common
 
         private void customForm()
         {
-            bbiMenu.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
+            bbiMenu.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
 
             sptDonGia.Format();
             sptThanhTien.Format();

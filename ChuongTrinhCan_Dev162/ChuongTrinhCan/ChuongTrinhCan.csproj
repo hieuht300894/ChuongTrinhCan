@@ -328,6 +328,7 @@
     <None Include="Resources\checkbox2_32x32.png" />
     <None Include="Resources\convert_32x32.png" />
     <None Include="Resources\convert_16x16.png" />
+    <None Include="Resources\Error.png" />
     <Content Include="Scale.ico" />
   </ItemGroup>
   <ItemGroup>
